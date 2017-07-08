@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_item_uno"
+            android:title="@string/nav_item_uno"/>
+        <item
+            android:id="@+id/nav_item_dos"
+            android:title="@string/nav_item_dos"/>
+    </group>
+
+    <item android:title="Contacto">
+        <menu>
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/nav_item_contacto"/>
+        </menu>
+    </item>
+
+</menu>

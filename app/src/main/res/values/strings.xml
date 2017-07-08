@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">QSYapp</string>
+
+    <string name="navigation_drawer_open">Abrir menu de navegación</string>
+    <string name="navigation_drawer_close">Cerrar menu de navegación</string>
+
+    <string name="action_settings">Configuración</string>
+    <string name="nav_item_uno">Primer item</string>
+    <string name="nav_item_dos">Segundo item</string>
+    <string name="nav_item_contacto">Contactanos</string>
+</resources>
