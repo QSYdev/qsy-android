@@ -2,12 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_item_uno"
-            android:title="@string/nav_item_uno"/>
-        <item
-            android:id="@+id/nav_item_dos"
-            android:title="@string/nav_item_dos"/>
+        <item android:title="Ejecucion">
+            <menu>
+                <item
+                    android:id="@+id/nav_custom_executor"
+                    android:title="@string/nav_custom_executor"/>
+                <item
+                    android:id="@+id/nav_player_executor"
+                    android:title="@string/nav_player_executor"/>
+            </menu>
+        </item>
     </group>
 
     <item android:title="Contacto">

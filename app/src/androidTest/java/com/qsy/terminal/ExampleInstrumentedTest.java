@@ -1,4 +1,4 @@
-package com.qsy.qsyapp;
+package com.qsy.terminal;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

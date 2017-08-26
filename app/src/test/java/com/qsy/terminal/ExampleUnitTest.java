@@ -1,4 +1,4 @@
-package com.qsy.qsyapp;
+package com.qsy.terminal;
 
 import org.junit.Test;
 

@@ -5,7 +5,7 @@
     <string name="navigation_drawer_close">Cerrar menu de navegación</string>
 
     <string name="action_settings">Configuración</string>
-    <string name="nav_item_uno">Primer item</string>
-    <string name="nav_item_dos">Segundo item</string>
+    <string name="nav_custom_executor">Rutina personalizada</string>
+    <string name="nav_player_executor">Aleatoria</string>
     <string name="nav_item_contacto">Contactanos</string>
 </resources>
