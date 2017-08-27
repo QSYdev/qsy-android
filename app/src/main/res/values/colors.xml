@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="faded_gray">#c6caca</color>
+    <color name="gray_fade_out">#f2f4f4</color>
+
+    <color name="form_fields_text_color">#686b6b</color>
 </resources>
