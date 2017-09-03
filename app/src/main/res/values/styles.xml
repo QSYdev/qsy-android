@@ -54,4 +54,22 @@
         <item name="android:paddingRight">@dimen/form_field_padding_right</item>
     </style>
 
+    <style name="PlayerColorLayout">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginLeft">@dimen/player_layout_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/player_layout_margin_right</item>
+        <item name="android:layout_marginTop">@dimen/player_layout_margin_top</item>
+    </style>
+
+    <style name="PlayerColorField">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/player_color_field_padding_left</item>
+        <item name="android:paddingRight">@dimen/player_color_field_padding_right</item>
+        <item name="android:textSize">@dimen/player_form_text_size</item>
+        <item name="android:textColor">@color/form_fields_text_color</item>
+    </style>
+
 </resources>

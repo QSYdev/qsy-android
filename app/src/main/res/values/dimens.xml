@@ -20,4 +20,10 @@
     <dimen name="form_field_padding_right">8dp</dimen>
     <dimen name="form_field_padding_top">15dp</dimen>
     <dimen name="form_field_padding_bottom">15dp</dimen>
+    <dimen name="player_color_field_padding_right">3dp</dimen>
+    <dimen name="player_color_field_padding_left">3dp</dimen>
+    <dimen name="player_layout_margin_left">15dp</dimen>
+    <dimen name="player_layout_margin_right">15dp</dimen>
+    <dimen name="player_layout_margin_top">3dp</dimen>
+    <dimen name="player_form_text_size">22dp</dimen>
 </resources>

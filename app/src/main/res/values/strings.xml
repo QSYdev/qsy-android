@@ -25,4 +25,10 @@
     <string name="delay_in_miliseconds">%1$d milisegundos</string>
     <string name="timeout_in_miliseconds">%1$d milisegundos</string>
     <string name="routine_duration_in_seconds">%1$d segundos</string>
+    <string name="configure_players">Configurar jugadores</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="player_number">Jugador %1$d</string>
+    <string name="button_off">OFF</string>
+    <string name="button_on">ON</string>
 </resources>

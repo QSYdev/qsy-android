@@ -2,6 +2,7 @@ package com.qsy.terminal.executors;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,6 +26,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class PlayerExecutorFragment extends Fragment {
+	private Button mPlayerRedButton;
+	private Button mPlayerGreenButton;
+	private Button mPlayerBlueButton;
+	private boolean mPlayerRedOn;
+	private boolean mPlayerGreenOn;
+	private boolean mPlayerBlueOn;
 	private Spinner mAmountOfNodesSpinner;
 	private EditText mAmountOfStepsEditText;
 	private Button mRoutineDurationButton;
@@ -56,6 +64,9 @@ public class PlayerExecutorFragment extends Fragment {
 		mNodeDelayButton = rootView.findViewById(R.id.node_delay_bt);
 		mStepTimeoutButton = rootView.findViewById(R.id.step_timeout_bt);
 		mStartRoutineButton = rootView.findViewById(R.id.start_routine);
+		mPlayerRedButton = rootView.findViewById(R.id.player_button_red);
+		mPlayerGreenButton = rootView.findViewById(R.id.player_button_green);
+		mPlayerBlueButton = rootView.findViewById(R.id.player_button_blue);
 		setupOnClickListeners();
 
 		mRoutineDurationTextView = rootView.findViewById(R.id.routine_duration_tv);
@@ -132,6 +143,45 @@ public class PlayerExecutorFragment extends Fragment {
 	}
 
 	private void setupOnClickListeners() {
+		mPlayerRedButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(!mPlayerRedOn) {
+					mPlayerRedButton.setText(getString(R.string.button_on));
+					mPlayerRedOn = true;
+				}
+				else {
+					mPlayerRedButton.setText(getString(R.string.button_off));
+					mPlayerRedOn = false;
+				}
+			}
+		});
+		mPlayerGreenButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(!mPlayerGreenOn) {
+					mPlayerGreenButton.setText(getString(R.string.button_on));
+					mPlayerGreenOn = true;
+				}
+				else {
+					mPlayerGreenButton.setText(getString(R.string.button_off));
+					mPlayerGreenOn = false;
+				}
+			}
+		});
+		mPlayerBlueButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(!mPlayerBlueOn){
+					mPlayerBlueButton.setText(getString(R.string.button_on));
+					mPlayerBlueOn = true;
+				}
+				else {
+					mPlayerBlueButton.setText(getString(R.string.button_off));
+					mPlayerBlueOn = false;
+				}
+			}
+		});
 		mRoutineDurationButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
