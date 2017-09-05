@@ -14,6 +14,16 @@
         </item>
     </group>
 
+    <group android:checkableBehavior="single">
+        <item android:title="Conexión">
+            <menu>
+                <item
+                    android:id="@+id/nav_libterminal"
+                    android:title="@string/libterminal_connection" />
+            </menu>
+        </item>
+    </group>
+
     <item android:title="Contacto">
         <menu>
             <item

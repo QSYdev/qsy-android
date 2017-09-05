@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.qsy.terminal.MainActivity"
+                tools:layout_editor_absoluteY="81dp"
+                tools:layout_editor_absoluteX="0dp" >
+
+<Button
+    android:id="@+id/stopForegroundService"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="18dp"
+    android:layout_y="25dp"
+    android:text="Stop Foreground Service"
+    android:layout_below="@+id/startForegroundService"
+    android:layout_alignStart="@+id/startForegroundService" />
+
+<Button
+    android:id="@+id/startForegroundService"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Start Foreground Service"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginStart="22dp"
+    android:layout_marginTop="15dp" />
+
+<Button
+    android:id="@+id/searchNodes"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginBottom="33dp"
+    android:layout_marginEnd="125dp"
+    android:text="Search Nodes" />
+
+</RelativeLayout>

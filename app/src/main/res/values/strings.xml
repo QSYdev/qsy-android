@@ -31,4 +31,5 @@
     <string name="player_number">Jugador %1$d</string>
     <string name="button_off">OFF</string>
     <string name="button_on">ON</string>
+    <string name="libterminal_connection">Tortugas</string>
 </resources>
