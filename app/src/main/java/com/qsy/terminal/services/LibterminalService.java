@@ -3,12 +3,16 @@ package com.qsy.terminal.services;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 
 import android.support.annotation.Nullable;
+import android.text.format.Formatter;
 
 import libterminal.api.TerminalAPI;
 
@@ -20,8 +24,16 @@ public class LibterminalService extends Service {
 
 	@Override
 	public void onCreate() {
+		WifiManager mgr = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
+		String ipAddress = Formatter.formatIpAddress(mgr.getConnectionInfo().getIpAddress());
+		Inet4Address address = null;
 		try {
-			libterminal = new TerminalAPI();
+			address = (Inet4Address) Inet4Address.getByName(ipAddress);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		try {
+			libterminal = new TerminalAPI(address);
 			libterminal.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -39,6 +51,11 @@ public class LibterminalService extends Service {
 		}
 
 		return START_NOT_STICKY;
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 	}
 
 	public TerminalAPI getTerminal() {

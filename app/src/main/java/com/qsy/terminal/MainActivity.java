@@ -49,14 +49,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 		mDrawer = findViewById(R.id.drawer_layout);
 		mToggle = new ActionBarDrawerToggle(
-				this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+			this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
 		mDrawer.setDrawerListener(mToggle);
 		mToggle.syncState();
 
 		mNavigationView = findViewById(R.id.nav_view);
 		mNavigationView.setNavigationItemSelectedListener(this);
+	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (libterminalService != null) {
+			try {
+				libterminalService.getTerminal().stop();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			unbindService(mConnection);
+		}
 	}
 
 	public void startServiceListener(View view) {
@@ -70,15 +82,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		final Intent intent = new Intent(MainActivity.this, LibterminalService.class);
 		intent.setAction("off");
 		startService(intent);
+		// TODO: aca hay un pequeño problema. Llamar a stop en la terminal suele tardar mas
+		// de 500ms. El problema es que estamos adentro de un listener, y por las reglas de
+		// android no se puede hacer operaciones(dentro de los listeners y esas cosas) de mas
+		// de 500ms ya que traba a el thread de la UI. Se podria usar un background task
+		// que se encargue de cerrar todos los threads y terminar la terminal, pero nose si
+		// es lo mas apropiado.
 		if (libterminalService != null) {
-			//TODO main.close();
+			try {
+				libterminalService.getTerminal().stop();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 	public void searchNodesListener(View view) {
 		if (libterminalService != null) {
-			libterminalService.getTerminal().searchNodes();
+			libterminalService.getTerminal().startNodesSearch();
 		} else {
 			Toast.makeText(MainActivity.this, "Aun no se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
 		}
@@ -119,14 +141,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			case R.id.nav_custom_executor:
 				break;
 			case R.id.nav_player_executor:
-				if(libterminalService == null) {
+				if (libterminalService == null) {
 					Toast.makeText(MainActivity.this,
 						"No esta la terminal enlazada",
-						Toast.LENGTH_SHORT);
+						Toast.LENGTH_SHORT).show();
 					break;
 				}
+				PlayerExecutorFragment playerExecutorFragment = new PlayerExecutorFragment(libterminalService);
 				fm.beginTransaction().replace(R.id.content_main,
-					new PlayerExecutorFragment()).commit();
+					playerExecutorFragment).commit();
 				break;
 			case R.id.nav_libterminal:
 				LibterminalFragment libterminalFragment = new LibterminalFragment(this);
@@ -143,11 +166,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				if(event.getEventType() == Event.EventType.newNode) {
-					Node node = (Node) event.getContent();
-					Toast.makeText(getApplicationContext(),
-						"Se conecto el nodo "+node.getNodeId(),
-						Toast.LENGTH_SHORT);
+				switch (event.getEventType()) {
+					case newNode:
+						Node newNode = (Node) event.getContent();
+						Toast.makeText(
+							getApplicationContext(),
+							getString(R.string.newNode, newNode.getNodeId()),
+							Toast.LENGTH_SHORT)
+							.show();
+						break;
+					case disconnectedNode:
+						Node disconnectedNode = (Node) event.getContent();
+						Toast.makeText(
+							getApplicationContext(),
+							getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
+							Toast.LENGTH_SHORT)
+							.show();
+
 				}
 			}
 		});
@@ -159,15 +194,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		public void onServiceConnected(final ComponentName componentName, final IBinder iBinder) {
 			LibterminalService.LocalBinder binder = (LibterminalService.LocalBinder) iBinder;
 			libterminalService = (LibterminalService) binder.getService();
-			libterminalService.getTerminal().suscribeToTerminalEvents(MainActivity.this);
+			libterminalService.getTerminal().addListener(MainActivity.this);
 			Toast.makeText(MainActivity.this, "Se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
 		}
 
 		@Override
 		public void onServiceDisconnected(final ComponentName componentName) {
-//			libterminalService.getTerminal().removeListener(MainActivity.this);
-//			main = null;
-//			Toast.makeText(MainActivity.this, "Se ha desenlazado de la terminal", Toast.LENGTH_LONG).show();
+			try {
+				libterminalService.getTerminal().stop();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			libterminalService.getTerminal().removeListener(MainActivity.this);
+			libterminalService = null;
+			Toast.makeText(MainActivity.this, "Se ha desenlazado de la terminal", Toast.LENGTH_LONG).show();
 		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.qsy.terminal.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
@@ -13,17 +15,25 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.qsy.terminal.R;
+import com.qsy.terminal.services.LibterminalService;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 
-public class PlayerExecutorFragment extends Fragment {
+import libterminal.lib.node.Node;
+import libterminal.lib.routine.Color;
+import libterminal.patterns.observer.Event;
+import libterminal.patterns.observer.EventListener;
+
+public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private Button mPlayerRedButton;
 	private Button mPlayerGreenButton;
 	private Button mPlayerBlueButton;
@@ -51,6 +61,19 @@ public class PlayerExecutorFragment extends Fragment {
 	private TextView mNodeDelayTextView;
 	private TextView mStepTimeoutTextView;
 	private TextView mRoutineDurationTextView;
+
+	private LibterminalService mLibterminalService;
+
+	public PlayerExecutorFragment() {
+		super();
+	}
+
+	@SuppressLint("ValidFragment")
+	public PlayerExecutorFragment(LibterminalService libterminalService) {
+		super();
+		this.mLibterminalService = libterminalService;
+		libterminalService.getTerminal().addListener(this);
+	}
 
 	@Nullable
 	@Override
@@ -82,17 +105,7 @@ public class PlayerExecutorFragment extends Fragment {
 
 		mAmountOfStepsEditText = rootView.findViewById(R.id.amount_of_steps_et);
 
-		Integer[] ints = new Integer[5];
-		// TODO: el array va a ser construido usando la cantidad de nodos conectados
-		for (int i = 0; i < 5; i++) ints[i] = i + 1;
-
-		ArrayAdapter<Integer> adapter = new ArrayAdapter<>(
-			getActivity(),
-			android.R.layout.simple_spinner_item,
-			ints);
-
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mAmountOfNodesSpinner.setAdapter(adapter);
+		setAmountOfNodesSpinner();
 
 		mStepTimeoutValue = new BigInteger(String.valueOf(0));
 		mNodeDelayValue = new BigInteger(String.valueOf(0));
@@ -106,6 +119,23 @@ public class PlayerExecutorFragment extends Fragment {
 		mAmountOfStepsValue = 0;
 
 		return rootView;
+	}
+
+	@NonNull
+	private void setAmountOfNodesSpinner() {
+		int connectedNodes = mLibterminalService.getTerminal().connectedNodesAmount();
+		Integer[] ints = new Integer[connectedNodes];
+		// TODO: el array va a ser construido usando la cantidad de nodos conectados
+		for (int i = 0; i < connectedNodes; i++) ints[i] = i + 1;
+
+		ArrayAdapter<Integer> adapter = new ArrayAdapter<>(
+			getActivity(),
+			android.R.layout.simple_spinner_item,
+			ints);
+
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mAmountOfNodesSpinner.setAdapter(adapter);
+
 	}
 
 	private void setupSwitchCompatListeners() {
@@ -144,11 +174,10 @@ public class PlayerExecutorFragment extends Fragment {
 		mPlayerRedButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(!mPlayerRedOn) {
+				if (!mPlayerRedOn) {
 					mPlayerRedButton.setText(getString(R.string.button_on));
 					mPlayerRedOn = true;
-				}
-				else {
+				} else {
 					mPlayerRedButton.setText(getString(R.string.button_off));
 					mPlayerRedOn = false;
 				}
@@ -157,11 +186,10 @@ public class PlayerExecutorFragment extends Fragment {
 		mPlayerGreenButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(!mPlayerGreenOn) {
+				if (!mPlayerGreenOn) {
 					mPlayerGreenButton.setText(getString(R.string.button_on));
 					mPlayerGreenOn = true;
-				}
-				else {
+				} else {
 					mPlayerGreenButton.setText(getString(R.string.button_off));
 					mPlayerGreenOn = false;
 				}
@@ -170,11 +198,10 @@ public class PlayerExecutorFragment extends Fragment {
 		mPlayerBlueButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(!mPlayerBlueOn){
+				if (!mPlayerBlueOn) {
 					mPlayerBlueButton.setText(getString(R.string.button_on));
 					mPlayerBlueOn = true;
-				}
-				else {
+				} else {
 					mPlayerBlueButton.setText(getString(R.string.button_off));
 					mPlayerBlueOn = false;
 				}
@@ -188,7 +215,7 @@ public class PlayerExecutorFragment extends Fragment {
 					.addHmsPickerDialogHandler(new HmsPickerDialogFragment.HmsPickerDialogHandlerV2() {
 						@Override
 						public void onDialogHmsSet(int reference, boolean isNegative, int hours, int minutes, int seconds) {
-							mRoutineDurationValue = seconds + (minutes*60);
+							mRoutineDurationValue = seconds + (minutes * 60);
 							mRoutineDurationTextView.setText(getString(
 								R.string.routine_duration_in_seconds,
 								mRoutineDurationValue
@@ -247,12 +274,37 @@ public class PlayerExecutorFragment extends Fragment {
 				// TODO: arreglar esto plizzz
 				try {
 					mAmountOfStepsValue = Integer.parseInt(mAmountOfStepsEditText.getText().toString());
-				} catch(NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					e.printStackTrace();
 				}
+				ArrayList<Color> playersAndColors = new ArrayList<Color>();
+				if (mPlayerRedOn)
+					playersAndColors.add(new Color((byte) 0xF, (byte) 0x0, (byte) 0x0));
+				if (mPlayerBlueOn)
+					playersAndColors.add(new Color((byte) 0x0, (byte) 0x0, (byte) 0xF));
+				if (mPlayerGreenOn)
+					playersAndColors.add(new Color((byte) 0x0, (byte) 0xF, (byte) 0x0));
+
+				mLibterminalService.getTerminal().executePlayer(null, 3, playersAndColors,
+					mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
+					mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
+					mSoundValue, mTouchNodeValue);
 			}
 		});
 
 	}
 
+	@Override
+	public void receiveEvent(final Event event) {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if ((event.getEventType() == Event.EventType.newNode ||
+					event.getEventType() == Event.EventType.disconnectedNode)) {
+
+					setAmountOfNodesSpinner();
+				}
+			}
+		});
+	}
 }
