@@ -1,4 +1,4 @@
-package com.qsy.terminal.fragments;
+package com.qsy.terminal.fragments.libterminal;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;

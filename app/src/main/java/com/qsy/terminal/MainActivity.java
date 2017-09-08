@@ -18,11 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.qsy.terminal.fragments.LibterminalFragment;
-import com.qsy.terminal.fragments.PlayerExecutorFragment;
+import com.qsy.terminal.fragments.libterminal.LibterminalFragment;
+import com.qsy.terminal.fragments.executors.PlayerExecutorFragment;
 import com.qsy.terminal.services.LibterminalService;
-
-import java.io.IOException;
 
 import libterminal.lib.node.Node;
 import libterminal.patterns.observer.Event;

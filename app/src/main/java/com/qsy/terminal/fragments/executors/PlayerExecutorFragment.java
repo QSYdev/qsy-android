@@ -1,4 +1,4 @@
-package com.qsy.terminal.fragments;
+package com.qsy.terminal.fragments.executors;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
