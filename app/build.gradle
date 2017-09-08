@@ -35,7 +35,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile('com.code-troopers.betterpickers:library:3.1.0')
-    compile('com.gitlab.qsy:libterminal:dev-SNAPSHOT', { changing = true })
 
+    compile group: 'com.github.QSYteam', name: 'libterminal', version: 'dev-SNAPSHOT', changing: true
     testCompile 'junit:junit:4.12'
 }
