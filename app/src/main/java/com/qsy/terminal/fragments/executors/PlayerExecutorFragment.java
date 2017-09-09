@@ -9,6 +9,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -61,6 +62,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private TextView mNodeDelayTextView;
 	private TextView mStepTimeoutTextView;
 	private TextView mRoutineDurationTextView;
+	private int mSelectedNode;
 
 	private LibterminalService mLibterminalService;
 
@@ -79,31 +81,42 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.player_executor_form, container, false);
-		mAmountOfNodesSpinner = rootView.findViewById(R.id.amount_of_nodes_spinner);
+		mAmountOfNodesSpinner = (Spinner) rootView.findViewById(R.id.amount_of_nodes_spinner);
+		mAmountOfNodesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+				mSelectedNode = i + 1;
+			}
 
-		mRoutineDurationButton = rootView.findViewById(R.id.routine_duration_bt);
-		mNodeDelayButton = rootView.findViewById(R.id.node_delay_bt);
-		mStepTimeoutButton = rootView.findViewById(R.id.step_timeout_bt);
-		mStartRoutineButton = rootView.findViewById(R.id.start_routine);
-		mPlayerRedButton = rootView.findViewById(R.id.player_button_red);
-		mPlayerGreenButton = rootView.findViewById(R.id.player_button_green);
-		mPlayerBlueButton = rootView.findViewById(R.id.player_button_blue);
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
+			}
+		});
+
+		mRoutineDurationButton = (Button) rootView.findViewById(R.id.routine_duration_bt);
+		mNodeDelayButton = (Button) rootView.findViewById(R.id.node_delay_bt);
+		mStepTimeoutButton = (Button) rootView.findViewById(R.id.step_timeout_bt);
+		mStartRoutineButton = (Button) rootView.findViewById(R.id.start_routine);
+		mPlayerRedButton = (Button) rootView.findViewById(R.id.player_button_red);
+		mPlayerGreenButton = (Button) rootView.findViewById(R.id.player_button_green);
+		mPlayerBlueButton = (Button) rootView.findViewById(R.id.player_button_blue);
 		setupOnClickListeners();
 
-		mRoutineDurationTextView = rootView.findViewById(R.id.routine_duration_tv);
+		mRoutineDurationTextView = (TextView) rootView.findViewById(R.id.routine_duration_tv);
 		mRoutineDurationTextView.setText(getString(R.string.routine_duration_in_seconds, 0));
-		mNodeDelayTextView = rootView.findViewById(R.id.node_delay_tv);
+		mNodeDelayTextView = (TextView) rootView.findViewById(R.id.node_delay_tv);
 		mNodeDelayTextView.setText(getString(R.string.delay_in_miliseconds, 0));
-		mStepTimeoutTextView = rootView.findViewById(R.id.step_timeout_tv);
+		mStepTimeoutTextView = (TextView) rootView.findViewById(R.id.step_timeout_tv);
 		mStepTimeoutTextView.setText(getString(R.string.timeout_in_miliseconds, 0));
 
-		mWaitForAllSwitchCompat = rootView.findViewById(R.id.wait_for_all_sc);
-		mStopOnTiemoutSwitchCompat = rootView.findViewById(R.id.stop_on_timeout_sc);
-		mSoundSwitchCompat = rootView.findViewById(R.id.sound_sc);
-		mTouchNodeSwitchCompat = rootView.findViewById(R.id.touch_node_sc);
+		mWaitForAllSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.wait_for_all_sc);
+		mStopOnTiemoutSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.stop_on_timeout_sc);
+		mSoundSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.sound_sc);
+		mTouchNodeSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.touch_node_sc);
 		setupSwitchCompatListeners();
 
-		mAmountOfStepsEditText = rootView.findViewById(R.id.amount_of_steps_et);
+		mAmountOfStepsEditText = (EditText) rootView.findViewById(R.id.amount_of_steps_et);
 
 		setAmountOfNodesSpinner();
 
@@ -285,7 +298,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				if (mPlayerGreenOn)
 					playersAndColors.add(new Color((byte) 0x0, (byte) 0xF, (byte) 0x0));
 
-				mLibterminalService.getTerminal().executePlayer(null, 3, playersAndColors,
+				mLibterminalService.getTerminal().executePlayer(null, mSelectedNode, playersAndColors,
 					mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
 					mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
 					mSoundValue, mTouchNodeValue);
