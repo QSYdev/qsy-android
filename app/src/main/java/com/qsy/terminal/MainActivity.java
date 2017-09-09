@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	private Toolbar mToolbar;
 	private NavigationView mNavigationView;
 
-	private MyConnection mConnection = new MyConnection();
+	private MainActivityConnection mConnection = new MainActivityConnection();
 	private LibterminalService libterminalService;
 
 	@Override
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		});
 	}
 
-	private final class MyConnection implements ServiceConnection {
+	private final class MainActivityConnection implements ServiceConnection {
 
 		@Override
 		public void onServiceConnected(final ComponentName componentName, final IBinder iBinder) {
