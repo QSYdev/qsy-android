@@ -82,17 +82,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.player_executor_form, container, false);
 		mAmountOfNodesSpinner = (Spinner) rootView.findViewById(R.id.amount_of_nodes_spinner);
-		mAmountOfNodesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-				mSelectedNode = i + 1;
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapterView) {
-
-			}
-		});
+		setAmountOfNodesSpinnerListener();
 
 		mRoutineDurationButton = (Button) rootView.findViewById(R.id.routine_duration_bt);
 		mNodeDelayButton = (Button) rootView.findViewById(R.id.node_delay_bt);
@@ -134,6 +124,19 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		return rootView;
 	}
 
+	private void setAmountOfNodesSpinnerListener() {
+		mAmountOfNodesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+				mSelectedNode = i + 1;
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
+			}
+		});
+	}
 	@NonNull
 	private void setAmountOfNodesSpinner() {
 		int connectedNodes = mLibterminalService.getTerminal().connectedNodesAmount();
@@ -283,8 +286,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mStartRoutineButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				// TODO: aca habria que empezar la rutina
-				// TODO: arreglar esto plizzz
 				try {
 					mAmountOfStepsValue = Integer.parseInt(mAmountOfStepsEditText.getText().toString());
 				} catch (NumberFormatException e) {
@@ -292,12 +293,14 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				}
 				ArrayList<Color> playersAndColors = new ArrayList<Color>();
 				if (mPlayerRedOn)
-					playersAndColors.add(new Color((byte) 0xF, (byte) 0x0, (byte) 0x0));
+					playersAndColors.add(Color.RED);
 				if (mPlayerBlueOn)
-					playersAndColors.add(new Color((byte) 0x0, (byte) 0x0, (byte) 0xF));
+					playersAndColors.add(Color.BLUE);
 				if (mPlayerGreenOn)
-					playersAndColors.add(new Color((byte) 0x0, (byte) 0xF, (byte) 0x0));
+					playersAndColors.add(Color.GREEN);
 
+				// TODO: el primer parametro es la asociacion de nodos. En un futuro
+				// vamos a tener la asociacion a nivel aplicacion
 				mLibterminalService.getTerminal().executePlayer(null, mSelectedNode, playersAndColors,
 					mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
 					mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
