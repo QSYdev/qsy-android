@@ -112,14 +112,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 		mStepTimeoutValue = new BigInteger(String.valueOf(0));
 		mNodeDelayValue = new BigInteger(String.valueOf(0));
-		mRoutineDurationValue = 0;
-
-		mWaitForAllValue = false;
-		mStopOnTimeoutValue = false;
-		mSoundValue = false;
-		mTouchNodeValue = false;
-
-		mAmountOfStepsValue = 0;
 
 		return rootView;
 	}

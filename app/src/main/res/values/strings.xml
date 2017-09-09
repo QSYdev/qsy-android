@@ -4,7 +4,6 @@
     <string name="navigation_drawer_open">Abrir menu de navegación</string>
     <string name="navigation_drawer_close">Cerrar menu de navegación</string>
 
-    <string name="action_settings">Configuración</string>
     <string name="nav_custom_executor">Rutina Personalizada</string>
     <string name="nav_player_executor">Rutina Aleatoria</string>
     <string name="nav_item_contacto">Contactanos</string>
@@ -34,4 +33,7 @@
     <string name="libterminal_connection">Tortugas</string>
     <string name="newNode">Se conecto el nodo %1$d</string>
     <string name="disconnectedNode">Se desconecto el nodo %1$d</string>
+    <string name="action_nodes">TORTUGAS</string>
+    <string name="routines_title">Rutinas</string>
+    <string name="contact_us">Contacto</string>
 </resources>

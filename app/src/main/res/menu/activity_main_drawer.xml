@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:title="Ejecucion">
+        <item android:title="@string/routines_title">
             <menu>
                 <item
                     android:id="@+id/nav_custom_executor"
@@ -14,17 +14,7 @@
         </item>
     </group>
 
-    <group android:checkableBehavior="single">
-        <item android:title="Conexión">
-            <menu>
-                <item
-                    android:id="@+id/nav_libterminal"
-                    android:title="@string/libterminal_connection" />
-            </menu>
-        </item>
-    </group>
-
-    <item android:title="Contacto">
+    <item android:title="@string/contact_us">
         <menu>
             <item
                 android:id="@+id/nav_send"

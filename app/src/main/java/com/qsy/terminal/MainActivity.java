@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.qsy.terminal.fragments.libterminal.LibterminalFragment;
@@ -31,9 +30,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	private DrawerLayout mDrawer;
 	private Toolbar mToolbar;
 	private NavigationView mNavigationView;
-	private Button mStartServiceButton;
-	private Button mStopServiceButton;
-	private Button mSearchNodesButton;
 
 	private MyConnection mConnection = new MyConnection();
 	private LibterminalService libterminalService;
@@ -122,10 +118,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		FragmentManager fm = getSupportFragmentManager();
+		if (id == R.id.action_nodes) {
+			LibterminalFragment libterminalFragment = new LibterminalFragment(this);
+			fm.beginTransaction().replace(R.id.content_main,
+				libterminalFragment).commit();
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -149,10 +147,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				fm.beginTransaction().replace(R.id.content_main,
 					playerExecutorFragment).commit();
 				break;
-			case R.id.nav_libterminal:
-				LibterminalFragment libterminalFragment = new LibterminalFragment(this);
-				fm.beginTransaction().replace(R.id.content_main,
-					libterminalFragment).commit();
 		}
 
 		mDrawer.closeDrawer(GravityCompat.START);
