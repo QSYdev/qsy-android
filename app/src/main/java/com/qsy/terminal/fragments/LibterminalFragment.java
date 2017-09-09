@@ -41,7 +41,7 @@ public class LibterminalFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.libterminal_connection, container, false);
 
-		mStartServiceButton = rootView.findViewById(R.id.startForegroundService);
+		mStartServiceButton = (Button) rootView.findViewById(R.id.startForegroundService);
 		mStartServiceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -49,7 +49,7 @@ public class LibterminalFragment extends Fragment {
 			}
 		});
 
-		mStopServiceButton = rootView.findViewById(R.id.stopForegroundService);
+		mStopServiceButton = (Button) rootView.findViewById(R.id.stopForegroundService);
 		mStopServiceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -57,7 +57,7 @@ public class LibterminalFragment extends Fragment {
 			}
 		});
 
-		mSearchNodesButton = rootView.findViewById(R.id.searchNodes);
+		mSearchNodesButton = (Button) rootView.findViewById(R.id.searchNodes);
 		mSearchNodesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
