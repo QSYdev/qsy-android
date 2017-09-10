@@ -32,12 +32,7 @@ public class LibterminalService extends Service {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		try {
-			libterminal = new TerminalAPI(address);
-			libterminal.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		libterminal = new TerminalAPI(address);
 	}
 
 	@Override

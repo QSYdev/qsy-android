@@ -1,85 +1,129 @@
 package com.qsy.terminal.fragments.libterminal;
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
-import com.qsy.terminal.MainActivity;
 import com.qsy.terminal.R;
+import com.qsy.terminal.services.LibterminalService;
+import com.qsy.terminal.utils.QSYUtils;
 
-import static android.content.Context.WIFI_SERVICE;
+import java.io.IOException;
 
-public class LibterminalFragment extends Fragment {
-	private Button mStartServiceButton;
-	private Button mStopServiceButton;
-	private Button mSearchNodesButton;
+import libterminal.lib.node.Node;
+import libterminal.patterns.observer.Event;
+import libterminal.patterns.observer.EventListener;
 
-	private MainActivity mActivity;
+public class LibterminalFragment extends Fragment implements EventListener {
+	private SwitchCompat mLibterminalStartStopSW;
+	private LibterminalService mLibterminalService;
 
-	public LibterminalFragment() {
-		super();
+	public static LibterminalFragment newInstance(LibterminalService libterminalService) {
+		LibterminalFragment libterminalFragment = new LibterminalFragment();
+		libterminalFragment.setLibterminalService(libterminalService);
+		return libterminalFragment;
 	}
 
-	@SuppressLint("ValidFragment")
-	public LibterminalFragment(MainActivity activity) {
-		super();
-		mActivity = activity;
+	public void setLibterminalService(LibterminalService libterminalService) {
+		this.mLibterminalService = libterminalService;
 	}
 
 	@Nullable
 	@Override
-	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.libterminal_connection, container, false);
 
-		mStartServiceButton = (Button) rootView.findViewById(R.id.startForegroundService);
-		mStartServiceButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				mActivity.startServiceListener(view);
-			}
-		});
-
-		mStopServiceButton = (Button) rootView.findViewById(R.id.stopForegroundService);
-		mStopServiceButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				mActivity.stopServiceListener(view);
-			}
-		});
-
-		mSearchNodesButton = (Button) rootView.findViewById(R.id.searchNodes);
-		mSearchNodesButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				mActivity.searchNodesListener(view);
-			}
-		});
-
-		// TODO get me the hell outta here
-		WifiManager mgr = (WifiManager) this.getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
-		if (!mgr.isWifiEnabled() || mgr.getConnectionInfo() == null) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-			// TODO string!
-			builder.setMessage("No hay red WiFi presente. La aplicación va a cerrar.");
-			builder.setCancelable(false);
-			builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-				}
-			});
-			builder.create().show();
-		}
+		mLibterminalStartStopSW = (SwitchCompat) rootView.findViewById(R.id.libterminal_start_sw);
+		setupSwitchCompatListener();
 		return rootView;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		QSYUtils.checkWifiEnabled(getContext().getApplicationContext());
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(mLibterminalService != null && mLibterminalService.getTerminal() != null) {
+			mLibterminalStartStopSW.setChecked(mLibterminalService.getTerminal().isUp());
+		}
+		setupSwitchCompatListener();
+	}
+
+	private void setupSwitchCompatListener() {
+		mLibterminalStartStopSW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					if (mLibterminalService != null) {
+						try {
+							mLibterminalService.getTerminal().start();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						mLibterminalService.getTerminal().addListener(LibterminalFragment.this);
+						mLibterminalService.getTerminal().startNodesSearch();
+					} else {
+						Toast.makeText(getContext().getApplicationContext(),
+							"Aun no se ha enlazado con la terminal",
+							Toast.LENGTH_LONG).show();
+						buttonView.setChecked(!isChecked);
+					}
+				} else {
+					try {
+						if(mLibterminalService != null) {
+							mLibterminalService.getTerminal()
+								.removeListener(LibterminalFragment.this);
+							mLibterminalService.getTerminal().stop();
+							Toast.makeText(getContext().getApplicationContext(),
+								"Terminal apagada",
+								Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(getContext().getApplicationContext(),
+								"Aun no se ha enlazado con la terminal",
+								Toast.LENGTH_LONG).show();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+	}
+
+	@Override
+	public void receiveEvent(final Event event) {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				switch (event.getEventType()) {
+					case newNode:
+						Node newNode = (Node) event.getContent();
+						Toast.makeText(
+							getContext().getApplicationContext(),
+							getString(R.string.newNode, newNode.getNodeId()),
+							Toast.LENGTH_SHORT)
+							.show();
+						break;
+					case disconnectedNode:
+						Node disconnectedNode = (Node) event.getContent();
+						Toast.makeText(
+							getContext().getApplicationContext(),
+							getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
+							Toast.LENGTH_SHORT)
+							.show();
+
+				}
+			}
+		});
 	}
 }

@@ -66,15 +66,10 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 	private LibterminalService mLibterminalService;
 
-	public PlayerExecutorFragment() {
-		super();
-	}
-
-	@SuppressLint("ValidFragment")
-	public PlayerExecutorFragment(LibterminalService libterminalService) {
-		super();
-		this.mLibterminalService = libterminalService;
-		libterminalService.getTerminal().addListener(this);
+	public static PlayerExecutorFragment newInstance(LibterminalService libterminalService) {
+		PlayerExecutorFragment paf = new PlayerExecutorFragment();
+		paf.setLibterminalService(libterminalService);
+		return paf;
 	}
 
 	@Nullable
@@ -314,5 +309,9 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				}
 			}
 		});
+	}
+
+	private void setLibterminalService(LibterminalService libterminalService) {
+		this.mLibterminalService = libterminalService;
 	}
 }

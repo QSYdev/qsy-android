@@ -14,18 +14,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.qsy.terminal.fragments.libterminal.LibterminalFragment;
 import com.qsy.terminal.fragments.executors.PlayerExecutorFragment;
 import com.qsy.terminal.services.LibterminalService;
+import com.qsy.terminal.utils.QSYUtils;
 
-import libterminal.lib.node.Node;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+	EventListener {
 	private ActionBarDrawerToggle mToggle;
 	private DrawerLayout mDrawer;
 	private Toolbar mToolbar;
@@ -50,6 +50,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 		mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 		mNavigationView.setNavigationItemSelectedListener(this);
+
+		final Intent intent = new Intent(MainActivity.this, LibterminalService.class);
+		intent.setAction("on");
+		startService(intent);
+		bindService(intent, mConnection, 0);
+
+		FragmentManager fm = getSupportFragmentManager();
+		LibterminalFragment libterminalFragment = new LibterminalFragment();
+		fm.beginTransaction().replace(R.id.content_main, libterminalFragment).commit();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		QSYUtils.checkWifiEnabled(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 	}
 
 	@Override
@@ -58,46 +78,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		if (libterminalService != null) {
 			try {
 				libterminalService.getTerminal().stop();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			unbindService(mConnection);
 		}
 	}
 
-	public void startServiceListener(View view) {
-		final Intent intent = new Intent(MainActivity.this, LibterminalService.class);
-		intent.setAction("on");
-		startService(intent);
-		bindService(intent, mConnection, 0);
-	}
-
-	public void stopServiceListener(View view) {
-		final Intent intent = new Intent(MainActivity.this, LibterminalService.class);
-		intent.setAction("off");
-		startService(intent);
-		// TODO: aca hay un pequeño problema. Llamar a stop en la terminal suele tardar mas
-		// de 500ms. El problema es que estamos adentro de un listener, y por las reglas de
-		// android no se puede hacer operaciones(dentro de los listeners y esas cosas) de mas
-		// de 500ms ya que traba a el thread de la UI. Se podria usar un background task
-		// que se encargue de cerrar todos los threads y terminar la terminal, pero nose si
-		// es lo mas apropiado.
-		if (libterminalService != null) {
-			try {
-				libterminalService.getTerminal().stop();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-
-	public void searchNodesListener(View view) {
-		if (libterminalService != null) {
-			libterminalService.getTerminal().startNodesSearch();
-		} else {
-			Toast.makeText(MainActivity.this, "Aun no se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
-		}
+	@Override
+	protected void onPause() {
+		super.onPause();
 	}
 
 	@Override
@@ -120,7 +110,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		int id = item.getItemId();
 		FragmentManager fm = getSupportFragmentManager();
 		if (id == R.id.action_nodes) {
-			LibterminalFragment libterminalFragment = new LibterminalFragment(this);
+			LibterminalFragment libterminalFragment =
+				LibterminalFragment.newInstance(libterminalService);
 			fm.beginTransaction().replace(R.id.content_main,
 				libterminalFragment).commit();
 		}
@@ -143,7 +134,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						Toast.LENGTH_SHORT).show();
 					break;
 				}
-				PlayerExecutorFragment playerExecutorFragment = new PlayerExecutorFragment(libterminalService);
+				PlayerExecutorFragment playerExecutorFragment =
+					PlayerExecutorFragment.newInstance(libterminalService);
+
 				fm.beginTransaction().replace(R.id.content_main,
 					playerExecutorFragment).commit();
 				break;
@@ -155,30 +148,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	@Override
 	public void receiveEvent(final Event event) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				switch (event.getEventType()) {
-					case newNode:
-						Node newNode = (Node) event.getContent();
-						Toast.makeText(
-							getApplicationContext(),
-							getString(R.string.newNode, newNode.getNodeId()),
-							Toast.LENGTH_SHORT)
-							.show();
-						break;
-					case disconnectedNode:
-						Node disconnectedNode = (Node) event.getContent();
-						Toast.makeText(
-							getApplicationContext(),
-							getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
-							Toast.LENGTH_SHORT)
-							.show();
-
-				}
-			}
-		});
 	}
+
 
 	private final class MainActivityConnection implements ServiceConnection {
 
@@ -186,7 +157,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		public void onServiceConnected(final ComponentName componentName, final IBinder iBinder) {
 			LibterminalService.LocalBinder binder = (LibterminalService.LocalBinder) iBinder;
 			libterminalService = (LibterminalService) binder.getService();
-			libterminalService.getTerminal().addListener(MainActivity.this);
+			FragmentManager fm = getSupportFragmentManager();
+			LibterminalFragment libterminalFragment =
+				(LibterminalFragment) fm.findFragmentById(R.id.content_main);
+			libterminalFragment.setLibterminalService(libterminalService);
 			Toast.makeText(MainActivity.this, "Se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
 		}
 
@@ -194,10 +168,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		public void onServiceDisconnected(final ComponentName componentName) {
 			try {
 				libterminalService.getTerminal().stop();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			libterminalService.getTerminal().removeListener(MainActivity.this);
 			libterminalService = null;
 			Toast.makeText(MainActivity.this, "Se ha desenlazado de la terminal", Toast.LENGTH_LONG).show();
 		}
