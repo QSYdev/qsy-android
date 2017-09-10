@@ -36,4 +36,5 @@
     <string name="action_nodes">TORTUGAS</string>
     <string name="routines_title">Rutinas</string>
     <string name="contact_us">Contacto</string>
+    <string name="execution_activity">Rutina en ejecución</string>
 </resources>

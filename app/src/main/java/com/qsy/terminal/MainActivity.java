@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		if (libterminalService != null) {
 			try {
 				libterminalService.getTerminal().stop();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			unbindService(mConnection);
@@ -76,16 +76,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		final Intent intent = new Intent(MainActivity.this, LibterminalService.class);
 		intent.setAction("off");
 		startService(intent);
-		// TODO: aca hay un pequeño problema. Llamar a stop en la terminal suele tardar mas
-		// de 500ms. El problema es que estamos adentro de un listener, y por las reglas de
-		// android no se puede hacer operaciones(dentro de los listeners y esas cosas) de mas
-		// de 500ms ya que traba a el thread de la UI. Se podria usar un background task
-		// que se encargue de cerrar todos los threads y terminar la terminal, pero nose si
-		// es lo mas apropiado.
 		if (libterminalService != null) {
 			try {
 				libterminalService.getTerminal().stop();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -194,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		public void onServiceDisconnected(final ComponentName componentName) {
 			try {
 				libterminalService.getTerminal().stop();
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			libterminalService.getTerminal().removeListener(MainActivity.this);

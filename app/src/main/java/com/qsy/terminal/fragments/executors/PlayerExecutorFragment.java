@@ -1,6 +1,7 @@
 package com.qsy.terminal.fragments.executors;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.qsy.terminal.ExecutionActivity;
 import com.qsy.terminal.R;
 import com.qsy.terminal.services.LibterminalService;
 
@@ -297,6 +299,9 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 					mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
 					mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
 					mSoundValue, mTouchNodeValue);
+
+				Intent intent = new Intent(getContext(), ExecutionActivity.class);
+				startActivity(intent);
 			}
 		});
 
