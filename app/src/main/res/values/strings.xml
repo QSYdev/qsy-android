@@ -37,4 +37,9 @@
     <string name="routines_title">Rutinas</string>
     <string name="contact_us">Contacto</string>
     <string name="execution_activity">Rutina en ejecución</string>
+    <string name="ok">OK</string>
+    <string name="routine_finished">Rutina terminada</string>
+    <string name="status_running">Ejecutando</string>
+    <string name="status_finished">Terminada</string>
+    <string name="status_standby">Stand by</string>
 </resources>
