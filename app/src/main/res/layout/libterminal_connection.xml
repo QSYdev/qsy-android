@@ -10,12 +10,4 @@
         android:text="@string/libterminal_start"/>
 
     <View style="@style/FormDivider"/>
-
-    <Button
-        style="@style/FormButton"
-        android:id="@+id/start_nodes_search_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/start_nodes_search"/>
-
 </LinearLayout>

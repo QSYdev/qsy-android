@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	private MainActivityConnection mConnection = new MainActivityConnection();
 	private LibterminalService libterminalService;
+	private LibterminalFragment mLibterminalFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +58,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		bindService(intent, mConnection, 0);
 
 		FragmentManager fm = getSupportFragmentManager();
-		LibterminalFragment libterminalFragment = new LibterminalFragment();
-		fm.beginTransaction().replace(R.id.content_main, libterminalFragment).commit();
+		mLibterminalFragment = new LibterminalFragment();
+		fm.beginTransaction().replace(R.id.content_main, mLibterminalFragment).commit();
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		QSYUtils.checkWifiEnabled(this);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 	}
 
 	@Override
@@ -83,11 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			}
 			unbindService(mConnection);
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
 	}
 
 	@Override
@@ -110,10 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		int id = item.getItemId();
 		FragmentManager fm = getSupportFragmentManager();
 		if (id == R.id.action_nodes) {
-			LibterminalFragment libterminalFragment =
-				LibterminalFragment.newInstance(libterminalService);
+			mLibterminalFragment = LibterminalFragment.newInstance(libterminalService);
 			fm.beginTransaction().replace(R.id.content_main,
-				libterminalFragment).commit();
+				mLibterminalFragment).commit();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -132,6 +122,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					Toast.makeText(MainActivity.this,
 						"No esta la terminal enlazada",
 						Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if(!libterminalService.getTerminal().isUp()) {
+					Toast.makeText(getApplicationContext(),
+						getString(R.string.libterminal_not_up),
+						Toast.LENGTH_LONG).show();
 					break;
 				}
 				PlayerExecutorFragment playerExecutorFragment =
@@ -157,10 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		public void onServiceConnected(final ComponentName componentName, final IBinder iBinder) {
 			LibterminalService.LocalBinder binder = (LibterminalService.LocalBinder) iBinder;
 			libterminalService = (LibterminalService) binder.getService();
-			FragmentManager fm = getSupportFragmentManager();
-			LibterminalFragment libterminalFragment =
-				(LibterminalFragment) fm.findFragmentById(R.id.content_main);
-			libterminalFragment.setLibterminalService(libterminalService);
+			mLibterminalFragment.setLibterminalService(libterminalService);
 			Toast.makeText(MainActivity.this, "Se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
 		}
 

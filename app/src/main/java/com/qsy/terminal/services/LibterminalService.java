@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 
 import android.support.annotation.Nullable;
 import android.text.format.Formatter;
+import android.util.Log;
 
 import libterminal.api.TerminalAPI;
 
@@ -33,6 +34,7 @@ public class LibterminalService extends Service {
 			e.printStackTrace();
 		}
 		libterminal = new TerminalAPI(address);
+		Log.d("LibterminalService", "inside onCreate");
 	}
 
 	@Override
@@ -54,6 +56,7 @@ public class LibterminalService extends Service {
 	}
 
 	public TerminalAPI getTerminal() {
+		Log.d("LibterminalService", "getTerminal");
 		return libterminal;
 	}
 

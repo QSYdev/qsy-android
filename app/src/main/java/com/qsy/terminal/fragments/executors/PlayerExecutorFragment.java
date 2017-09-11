@@ -1,6 +1,5 @@
 package com.qsy.terminal.fragments.executors;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +28,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import libterminal.lib.node.Node;
 import libterminal.lib.routine.Color;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
@@ -124,11 +122,11 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			}
 		});
 	}
+
 	@NonNull
 	private void setAmountOfNodesSpinner() {
 		int connectedNodes = mLibterminalService.getTerminal().connectedNodesAmount();
 		Integer[] ints = new Integer[connectedNodes];
-		// TODO: el array va a ser construido usando la cantidad de nodos conectados
 		for (int i = 0; i < connectedNodes; i++) ints[i] = i + 1;
 
 		ArrayAdapter<Integer> adapter = new ArrayAdapter<>(
@@ -286,12 +284,34 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				if (mPlayerGreenOn)
 					playersAndColors.add(Color.GREEN);
 
-				// TODO: el primer parametro es la asociacion de nodos. En un futuro
-				// vamos a tener la asociacion a nivel aplicacion
-				mLibterminalService.getTerminal().executePlayer(null, mSelectedNode, playersAndColors,
-					mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
-					mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
-					mSoundValue, mTouchNodeValue);
+				if (mLibterminalService.getTerminal().connectedNodesAmount() < 1) {
+					Toast.makeText(getContext().getApplicationContext(),
+						getString(R.string.not_enough_connected_nodes),
+						Toast.LENGTH_LONG).show();
+					return;
+				}
+				if(!mPlayerBlueOn && !mPlayerGreenOn && !mPlayerRedOn){
+					Toast.makeText(getContext().getApplicationContext(),
+						getString(R.string.no_players_selected),
+						Toast.LENGTH_LONG).show();
+					return;
+				}
+				try {
+					// TODO: el primer parametro es la asociacion de nodos. En un futuro
+					// vamos a tener la asociacion a nivel aplicacion
+					mLibterminalService.getTerminal().executePlayer(null, mSelectedNode, playersAndColors,
+						mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
+						mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
+						mSoundValue, mTouchNodeValue);
+				} catch (IllegalStateException e) {
+					Toast.makeText(getContext().getApplicationContext(),
+						getString(R.string.routine_currently_executing),
+						Toast.LENGTH_SHORT).show();
+				} catch (IllegalArgumentException e) {
+					Toast.makeText(getContext().getApplicationContext(),
+						getString(R.string.wrong_player_arguments),
+						Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 
@@ -299,6 +319,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 	@Override
 	public void receiveEvent(final Event event) {
+		if (getActivity() == null) return;
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

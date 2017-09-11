@@ -7,8 +7,6 @@ import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 
-import com.qsy.terminal.R;
-
 import static android.content.Context.WIFI_SERVICE;
 
 public class QSYUtils {

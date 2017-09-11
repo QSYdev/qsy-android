@@ -38,4 +38,9 @@
     <string name="contact_us">Contacto</string>
     <string name="start_nodes_search">Buscar tortugas</string>
     <string name="libterminal_start">Empezar la terminal</string>
+    <string name="routine_currently_executing">Hay una rutina corriendo</string>
+    <string name="wrong_player_arguments">Configuracion de rutina invalida</string>
+    <string name="not_enough_connected_nodes">No hay suficientes nodos conectados</string>
+    <string name="libterminal_not_up">La terminal no esta funcionando</string>
+    <string name="no_players_selected">Debes seleccionar al menos un jugador</string>
 </resources>

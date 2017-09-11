@@ -38,60 +38,49 @@ public class LibterminalFragment extends Fragment implements EventListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.libterminal_connection, container, false);
-
 		mLibterminalStartStopSW = (SwitchCompat) rootView.findViewById(R.id.libterminal_start_sw);
-		setupSwitchCompatListener();
-		return rootView;
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		QSYUtils.checkWifiEnabled(getContext().getApplicationContext());
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		if(mLibterminalService != null && mLibterminalService.getTerminal() != null) {
+		if (mLibterminalService != null) {
 			mLibterminalStartStopSW.setChecked(mLibterminalService.getTerminal().isUp());
 		}
 		setupSwitchCompatListener();
+		return rootView;
 	}
 
 	private void setupSwitchCompatListener() {
 		mLibterminalStartStopSW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (mLibterminalService == null) {
+					Toast.makeText(getContext().getApplicationContext(),
+						"Aun no se ha enlazado con la terminal",
+						Toast.LENGTH_LONG).show();
+					buttonView.setChecked(false);
+					return;
+				}
 				if (isChecked) {
-					if (mLibterminalService != null) {
-						try {
-							mLibterminalService.getTerminal().start();
-						} catch (IOException e) {
-							e.printStackTrace();
+					try {
+						if (mLibterminalService.getTerminal().isUp()) {
+							buttonView.setChecked(true);
+							return;
 						}
-						mLibterminalService.getTerminal().addListener(LibterminalFragment.this);
-						mLibterminalService.getTerminal().startNodesSearch();
-					} else {
-						Toast.makeText(getContext().getApplicationContext(),
-							"Aun no se ha enlazado con la terminal",
-							Toast.LENGTH_LONG).show();
-						buttonView.setChecked(!isChecked);
+						mLibterminalService.getTerminal().start();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
+					mLibterminalService.getTerminal().addListener(LibterminalFragment.this);
+					mLibterminalService.getTerminal().startNodesSearch();
 				} else {
 					try {
-						if(mLibterminalService != null) {
-							mLibterminalService.getTerminal()
-								.removeListener(LibterminalFragment.this);
-							mLibterminalService.getTerminal().stop();
-							Toast.makeText(getContext().getApplicationContext(),
-								"Terminal apagada",
-								Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(getContext().getApplicationContext(),
-								"Aun no se ha enlazado con la terminal",
-								Toast.LENGTH_LONG).show();
+						if (!mLibterminalService.getTerminal().isUp()) {
+							buttonView.setChecked(false);
+							return;
 						}
+						mLibterminalService.getTerminal()
+							.removeListener(LibterminalFragment.this);
+						mLibterminalService.getTerminal().stop();
+						Toast.makeText(getContext().getApplicationContext(),
+							"Terminal apagada",
+							Toast.LENGTH_SHORT).show();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -102,6 +91,7 @@ public class LibterminalFragment extends Fragment implements EventListener {
 
 	@Override
 	public void receiveEvent(final Event event) {
+		if (getActivity() == null) return;
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
