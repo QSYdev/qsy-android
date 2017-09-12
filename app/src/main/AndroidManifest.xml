@@ -23,7 +23,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <service android:name="com.qsy.terminal.services.LibterminalService" />
+
+        <activity
+            android:name=".ExecutionActivity"
+            android:label="@string/execution_activity">
+        </activity>
+
+        <service
+            android:name="com.qsy.terminal.services.LibterminalService"
+            android:exported="false" />
     </application>
 
 </manifest>
