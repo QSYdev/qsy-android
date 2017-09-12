@@ -298,6 +298,13 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 						Toast.LENGTH_LONG).show();
 					return;
 				}
+				// TODO: chequear cual seria el tiempo minimo
+				if(mAmountOfStepsValue < 1 && mRoutineDurationValue*1000 < 500) {
+					Toast.makeText(getContext().getApplicationContext(),
+						getString(R.string.wrong_duration_or_steps),
+						Toast.LENGTH_LONG).show();
+					return;
+				}
 				try {
 					// TODO: el primer parametro es la asociacion de nodos. En un futuro
 					// vamos a tener la asociacion a nivel aplicacion
@@ -309,10 +316,12 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.routine_currently_executing),
 						Toast.LENGTH_SHORT).show();
+					return;
 				} catch (IllegalArgumentException e) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.wrong_player_arguments),
 						Toast.LENGTH_LONG).show();
+					return;
 				}
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
 				startActivity(intent);

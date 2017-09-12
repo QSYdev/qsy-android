@@ -49,4 +49,5 @@
     <string name="status_running">Ejecutando</string>
     <string name="status_finished">Terminada</string>
     <string name="status_standby">Stand by</string>
+    <string name="wrong_duration_or_steps">Los pasos o la duracion deben ser mayor que cero</string>
 </resources>

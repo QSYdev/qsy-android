@@ -1,6 +1,7 @@
 package com.qsy.terminal;
 
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -84,7 +85,12 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 						AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
 						builder.setTitle(R.string.routine_finished);
 						builder.setIcon(android.R.drawable.ic_dialog_alert);
-						builder.setNeutralButton(R.string.ok, null);
+						builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								ExecutionActivity.this.finish();
+							}
+						});
 						builder.create().show();
 					}
 				});
