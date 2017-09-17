@@ -7,19 +7,22 @@ import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
 
-import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.text.format.Formatter;
 import android.util.Log;
 
 import libterminal.api.TerminalAPI;
+import libterminal.patterns.observer.Event;
+import libterminal.patterns.observer.EventListener;
 
 
 public class LibterminalService extends Service {
 	private TerminalAPI libterminal;
+	private WakelockManager wakelockManager;
 
 	private final IBinder binder = new LocalBinder();
 
@@ -34,6 +37,9 @@ public class LibterminalService extends Service {
 			e.printStackTrace();
 		}
 		libterminal = new TerminalAPI(address);
+		wakelockManager = new WakelockManager();
+		// TODO: descomentar una vez que TerminalAPI no pierda sus listeners
+		// libterminal.addListener(wakelockManager);
 		Log.d("LibterminalService", "inside onCreate");
 	}
 
@@ -72,6 +78,43 @@ public class LibterminalService extends Service {
 	@Override
 	public IBinder onBind(final Intent intent) {
 		return binder;
+	}
+
+	final private class WakelockManager implements EventListener {
+
+		private PowerManager.WakeLock cpuWakeLock;
+		private WifiManager.WifiLock wifiLock;
+
+		public WakelockManager() {
+			PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+			WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+
+			cpuWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RoutineWakeLock");
+			wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "RoutineWifiLock");
+
+			/*
+			 * Esto hace que las las llamadas a acquire() y release() sean idempotentes. Considerar
+			 * sacar una vez que esté el evento de comienzo de rutina. Esto haría que se lance
+			 * una excepción si se adquiere o libera un lock más de una vez.
+			 */
+			wifiLock.setReferenceCounted(false);
+			cpuWakeLock.setReferenceCounted(false);
+		}
+
+		@Override
+		public void receiveEvent(Event event) {
+			switch(event.getEventType()) {
+			    // TODO
+				/*case routineStarted:
+					cpuWakeLock.acquire();
+					wifiLock.release();
+					break;*/
+				case routineFinished:
+					cpuWakeLock.release();
+					wifiLock.release();
+					break;
+			}
+		}
 	}
 
 }
