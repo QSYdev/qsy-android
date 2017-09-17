@@ -105,8 +105,13 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 		setAmountOfNodesSpinner();
 
+		mNodeDelayValue = new BigInteger(String.valueOf(500));
+		mNodeDelayTextView.setText(getString(R.string.delay_in_miliseconds, 500));
+
+		mPlayerBlueButton.setText(getString(R.string.button_on));
+		mPlayerBlueOn = true;
+
 		mStepTimeoutValue = new BigInteger(String.valueOf(0));
-		mNodeDelayValue = new BigInteger(String.valueOf(0));
 
 		return rootView;
 	}

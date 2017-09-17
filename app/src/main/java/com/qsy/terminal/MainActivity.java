@@ -77,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			Intent intent = new Intent(MainActivity.this, LibterminalService.class);
+			intent.setAction("off");
+			startService(intent);
+
 			unbindService(mConnection);
 		}
 	}
@@ -128,6 +132,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					Toast.makeText(getApplicationContext(),
 						getString(R.string.libterminal_not_up),
 						Toast.LENGTH_LONG).show();
+					break;
+				}
+				if(libterminalService.getTerminal().connectedNodesAmount() < 1) {
+					Toast.makeText(getApplicationContext(),
+						getString(R.string.not_enough_connected_nodes),
+						Toast.LENGTH_SHORT).show();
 					break;
 				}
 				PlayerExecutorFragment playerExecutorFragment =
