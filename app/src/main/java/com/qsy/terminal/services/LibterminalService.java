@@ -30,17 +30,17 @@ public class LibterminalService extends Service {
 	public void onCreate() {
 		WifiManager mgr = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
 		String ipAddress = Formatter.formatIpAddress(mgr.getConnectionInfo().getIpAddress());
-		Inet4Address address = null;
+		Inet4Address address;
 		try {
 			address = (Inet4Address) Inet4Address.getByName(ipAddress);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		libterminal = new TerminalAPI(address);
 		wakelockManager = new WakelockManager();
-		// TODO: descomentar una vez que TerminalAPI no pierda sus listeners
-		// libterminal.addListener(wakelockManager);
-		Log.d("LibterminalService", "inside onCreate");
+		libterminal.addListener(wakelockManager);
+		Log.d("LibterminalService", "Servicio creado!");
 	}
 
 	@Override
@@ -59,10 +59,11 @@ public class LibterminalService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		wakelockManager.releaseLocks();
+		Log.d("LibterminalService", "Servicio destruido!");
 	}
 
 	public TerminalAPI getTerminal() {
-		Log.d("LibterminalService", "getTerminal");
 		return libterminal;
 	}
 
@@ -104,16 +105,25 @@ public class LibterminalService extends Service {
 		@Override
 		public void receiveEvent(Event event) {
 			switch(event.getEventType()) {
-			    // TODO
-				/*case routineStarted:
-					cpuWakeLock.acquire();
-					wifiLock.release();
-					break;*/
+				case routineStarted:
+					acquireLocks();
+					break;
 				case routineFinished:
-					cpuWakeLock.release();
-					wifiLock.release();
+					releaseLocks();
 					break;
 			}
+		}
+
+		void releaseLocks() {
+			wifiLock.release();
+			cpuWakeLock.release();
+			Log.d("LibterminalService", "Wakelocks liberados.");
+		}
+
+		void acquireLocks() {
+			wifiLock.acquire();
+			cpuWakeLock.acquire();
+			Log.d("LibterminalService", "Wakelocks adquiridos.");
 		}
 	}
 
