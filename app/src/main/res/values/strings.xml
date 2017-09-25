@@ -50,4 +50,8 @@
     <string name="status_finished">Terminada</string>
     <string name="status_standby">Stand by</string>
     <string name="wrong_duration_or_steps">Los pasos o la duración deben ser mayor que cero</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="execution_label">Ejecución</string>
 </resources>
