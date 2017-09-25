@@ -33,8 +33,13 @@ import java.util.ArrayList;
 import libterminal.lib.routine.Color;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
+import libterminal.patterns.visitor.EventHandle;
+import libterminal.patterns.visitor.EventHandler;
 
 public class PlayerExecutorFragment extends Fragment implements EventListener {
+
+    private final EventHandler eventHandler = new InternalEventHandler();
+
 	private Button mPlayerRedButton;
 	private Button mPlayerGreenButton;
 	private Button mPlayerBlueButton;
@@ -338,19 +343,30 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	@Override
 	public void receiveEvent(final Event event) {
 		if (getActivity() == null) return;
-		getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if ((event.getEventType() == Event.EventType.newNode ||
-					event.getEventType() == Event.EventType.disconnectedNode)) {
-
-					setAmountOfNodesSpinner();
-				}
-			}
-		});
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                event.acceptHandler(eventHandler);
+            }
+        });
 	}
 
 	private void setLibterminalService(LibterminalService libterminalService) {
 		this.mLibterminalService = libterminalService;
 	}
+
+	private final class InternalEventHandler extends EventHandler {
+
+        @Override
+        public void handle(final Event.NewNodeEvent newNodeEvent) {
+            super.handle(newNodeEvent);
+            setAmountOfNodesSpinner();
+        }
+
+        @Override
+        public void handle(final Event.DisconnectedNodeEvent disconnectedNodeEvent) {
+            super.handle(disconnectedNodeEvent);
+            setAmountOfNodesSpinner();
+        }
+    }
 }
