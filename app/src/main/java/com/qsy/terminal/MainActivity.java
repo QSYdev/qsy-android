@@ -134,12 +134,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						Toast.LENGTH_LONG).show();
 					break;
 				}
-				if(libterminalService.getTerminal().connectedNodesAmount() < 1) {
-					Toast.makeText(getApplicationContext(),
-						getString(R.string.not_enough_connected_nodes),
-						Toast.LENGTH_SHORT).show();
-					break;
-				}
 				PlayerExecutorFragment playerExecutorFragment =
 					PlayerExecutorFragment.newInstance(libterminalService);
 
