@@ -19,8 +19,12 @@ import java.io.IOException;
 import libterminal.lib.node.Node;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
+import libterminal.patterns.visitor.EventHandler;
 
 public class LibterminalFragment extends Fragment implements EventListener {
+
+	private final EventHandler eventHandler = new InternalEventHandler();
+
 	private SwitchCompat mLibterminalStartStopSW;
 	private LibterminalService mLibterminalService;
 
@@ -95,25 +99,33 @@ public class LibterminalFragment extends Fragment implements EventListener {
 		getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				switch (event.getEventType()) {
-					case newNode:
-						Node newNode = (Node) event.getContent();
-						Toast.makeText(
-							getContext().getApplicationContext(),
-							getString(R.string.newNode, newNode.getNodeId()),
-							Toast.LENGTH_SHORT)
-							.show();
-						break;
-					case disconnectedNode:
-						Node disconnectedNode = (Node) event.getContent();
-						Toast.makeText(
-							getContext().getApplicationContext(),
-							getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
-							Toast.LENGTH_SHORT)
-							.show();
-
-				}
+                event.acceptHandler(eventHandler);
 			}
 		});
 	}
+
+	private final class InternalEventHandler extends EventHandler {
+
+        @Override
+        public void handle(final Event.NewNodeEvent newNodeEvent) {
+            super.handle(newNodeEvent);
+            Node newNode = newNodeEvent.getNode();
+            Toast.makeText(
+                    getContext().getApplicationContext(),
+                    getString(R.string.newNode, newNode.getNodeId()),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+        @Override
+        public void handle(final Event.DisconnectedNodeEvent disconnectedNodeEvent) {
+            super.handle(disconnectedNodeEvent);
+            Node disconnectedNode = disconnectedNodeEvent.getNode();
+            Toast.makeText(
+                    getContext().getApplicationContext(),
+                    getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
 }

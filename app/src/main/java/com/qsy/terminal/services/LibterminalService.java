@@ -3,6 +3,7 @@ package com.qsy.terminal.services;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
+import android.database.sqlite.SQLiteBlobTooBigException;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
@@ -18,9 +19,13 @@ import android.util.Log;
 import libterminal.api.TerminalAPI;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
+import libterminal.patterns.visitor.EventHandler;
 
 
 public class LibterminalService extends Service {
+
+    private final EventHandler eventHandler = new InternalEventHandler();
+
 	private TerminalAPI libterminal;
 	private WakelockManager wakelockManager;
 
@@ -81,7 +86,7 @@ public class LibterminalService extends Service {
 		return binder;
 	}
 
-	final private class WakelockManager implements EventListener {
+	private final class WakelockManager implements EventListener {
 
 		private PowerManager.WakeLock cpuWakeLock;
 		private WifiManager.WifiLock wifiLock;
@@ -103,15 +108,8 @@ public class LibterminalService extends Service {
 		}
 
 		@Override
-		public void receiveEvent(Event event) {
-			switch(event.getEventType()) {
-				case routineStarted:
-					acquireLocks();
-					break;
-				case routineFinished:
-					releaseLocks();
-					break;
-			}
+		public void receiveEvent(final Event event) {
+            event.acceptHandler(LibterminalService.this.eventHandler);
 		}
 
 		void releaseLocks() {
@@ -126,5 +124,20 @@ public class LibterminalService extends Service {
 			Log.d("LibterminalService", "Wakelocks adquiridos.");
 		}
 	}
+
+	private final class InternalEventHandler extends EventHandler {
+
+        @Override
+        public void handle(final Event.RoutineStartedEvent routineStartedEvent) {
+            super.handle(routineStartedEvent);
+            wakelockManager.acquireLocks();
+        }
+
+        @Override
+        public void handle(final Event.RoutineFinishedEvent routineFinishedEvent) {
+            super.handle(routineFinishedEvent);
+            wakelockManager.releaseLocks();
+        }
+    }
 
 }

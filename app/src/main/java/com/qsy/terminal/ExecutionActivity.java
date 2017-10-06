@@ -18,8 +18,11 @@ import com.qsy.terminal.services.LibterminalService;
 
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
+import libterminal.patterns.visitor.EventHandler;
 
 public class ExecutionActivity extends AppCompatActivity implements EventListener {
+
+	private final EventHandler eventHandler = new InternalEventHandler();
 
 	private LibterminalService libterminalService;
 	private ExecutionActivityConnection mConnection = new ExecutionActivityConnection();
@@ -71,31 +74,17 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 	}
 
 	@Override
-	public void receiveEvent(Event event) {
+	public void receiveEvent(final Event event) {
 		/*
 		 * Tener en cuenta que esto se llama desde el hilo de Libterminal, lo cual no se si es
 		 * legal. Si algo raro pasa, mirar acá!
 		 */
-		switch (event.getEventType()) {
-			case routineFinished:
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-					    doStopRoutine(false);
-						AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
-						builder.setTitle(R.string.routine_finished);
-						builder.setIcon(android.R.drawable.ic_dialog_alert);
-						builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								ExecutionActivity.this.finish();
-							}
-						});
-						builder.create().show();
-					}
-				});
-				break;
-		}
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                event.acceptHandler(eventHandler);
+            }
+        });
 	}
 
 	private void doStopRoutine(boolean cancel) {
@@ -122,4 +111,23 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 			 */
 		}
 	}
+
+	private final class InternalEventHandler extends EventHandler {
+
+        @Override
+        public void handle(final Event.RoutineFinishedEvent routineFinishedEvent) {
+            super.handle(routineFinishedEvent);
+            doStopRoutine(false);
+            AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
+            builder.setTitle(R.string.routine_finished);
+            builder.setIcon(android.R.drawable.ic_dialog_alert);
+            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ExecutionActivity.this.finish();
+                }
+            });
+            builder.create().show();
+        }
+    }
 }
