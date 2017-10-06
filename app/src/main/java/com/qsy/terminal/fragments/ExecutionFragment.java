@@ -60,6 +60,12 @@ public class ExecutionFragment extends Fragment {
 		mListener = null;
 	}
 
+	// This function should only be called on the ui thread
+	public void stopChronometer() {
+		mChronometer.stop();
+		mStatus.setText(getString(R.string.status_finished));
+	}
+
 	public interface OnFragmentInteractionListener {
 		void routineCanceled();
 	}

@@ -1,11 +1,13 @@
 package com.qsy.terminal;
 
+import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.qsy.terminal.fragments.ExecutionFragment;
@@ -16,7 +18,7 @@ import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
 public class ExecutionActivity extends AppCompatActivity implements EventListener,
-		ExecutionFragment.OnFragmentInteractionListener {
+	ExecutionFragment.OnFragmentInteractionListener {
 
 	private final EventHandler eventHandler = new InternalEventHandler();
 
@@ -35,7 +37,7 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 
 		mExecFragment = new ExecutionFragment();
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, mExecFragment)
-				.commit();
+			.commit();
 	}
 
 	@Override
@@ -65,8 +67,8 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 			@Override
 			public void run() {
 				event.acceptHandler(eventHandler);
-            }
-        });
+			}
+		});
 	}
 
 	@Override
@@ -95,20 +97,26 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 
 	private final class InternalEventHandler extends EventHandler {
 
-        @Override
-        public void handle(final Event.RoutineFinishedEvent routineFinishedEvent) {
-            super.handle(routineFinishedEvent);
-            doStopRoutine(false);
-            AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
-            builder.setTitle(R.string.routine_finished);
-            builder.setIcon(android.R.drawable.ic_dialog_alert);
-            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ExecutionActivity.this.finish();
-                }
-            });
-            builder.create().show();
-        }
-    }
+		@Override
+		public void handle(final Event.RoutineFinishedEvent routineFinishedEvent) {
+			super.handle(routineFinishedEvent);
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					mExecFragment.stopChronometer();
+				}
+			});
+			AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
+			builder.setTitle(R.string.routine_finished);
+			builder.setIcon(android.R.drawable.ic_dialog_alert);
+			builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO: ir a la pestaña de results
+					ExecutionActivity.this.finish();
+				}
+			});
+			builder.create().show();
+		}
+	}
 }
