@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import com.qsy.terminal.R;
 import com.qsy.terminal.services.LibterminalService;
-import com.qsy.terminal.utils.QSYUtils;
 
 import java.io.IOException;
 
+import libterminal.api.TerminalAPI;
 import libterminal.lib.node.Node;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
@@ -26,16 +26,16 @@ public class LibterminalFragment extends Fragment implements EventListener {
 	private final EventHandler eventHandler = new InternalEventHandler();
 
 	private SwitchCompat mLibterminalStartStopSW;
-	private LibterminalService mLibterminalService;
+	private TerminalAPI mTerminalAPI;
 
-	public static LibterminalFragment newInstance(LibterminalService libterminalService) {
+	public static LibterminalFragment newInstance(TerminalAPI terminal) {
 		LibterminalFragment libterminalFragment = new LibterminalFragment();
-		libterminalFragment.setLibterminalService(libterminalService);
+		libterminalFragment.setTerminalAPI(terminal);
 		return libterminalFragment;
 	}
 
-	public void setLibterminalService(LibterminalService libterminalService) {
-		this.mLibterminalService = libterminalService;
+	public void setTerminalAPI(TerminalAPI terminal) {
+		this.mTerminalAPI = terminal;
 	}
 
 	@Nullable
@@ -43,8 +43,8 @@ public class LibterminalFragment extends Fragment implements EventListener {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.libterminal_connection, container, false);
 		mLibterminalStartStopSW = (SwitchCompat) rootView.findViewById(R.id.libterminal_start_sw);
-		if (mLibterminalService != null) {
-			mLibterminalStartStopSW.setChecked(mLibterminalService.getTerminal().isUp());
+		if (mTerminalAPI != null) {
+			mLibterminalStartStopSW.setChecked(mTerminalAPI.isUp());
 		}
 		setupSwitchCompatListener();
 		return rootView;
@@ -54,7 +54,7 @@ public class LibterminalFragment extends Fragment implements EventListener {
 		mLibterminalStartStopSW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (mLibterminalService == null) {
+				if (mTerminalAPI == null) {
 					Toast.makeText(getContext().getApplicationContext(),
 						"Aun no se ha enlazado con la terminal",
 						Toast.LENGTH_LONG).show();
@@ -63,25 +63,24 @@ public class LibterminalFragment extends Fragment implements EventListener {
 				}
 				if (isChecked) {
 					try {
-						if (mLibterminalService.getTerminal().isUp()) {
+						if (mTerminalAPI.isUp()) {
 							buttonView.setChecked(true);
 							return;
 						}
-						mLibterminalService.getTerminal().start();
+						mTerminalAPI.start();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					mLibterminalService.getTerminal().addListener(LibterminalFragment.this);
-					mLibterminalService.getTerminal().startNodesSearch();
+					mTerminalAPI.addListener(LibterminalFragment.this);
+					mTerminalAPI.startNodesSearch();
 				} else {
 					try {
-						if (!mLibterminalService.getTerminal().isUp()) {
+						if (!mTerminalAPI.isUp()) {
 							buttonView.setChecked(false);
 							return;
 						}
-						mLibterminalService.getTerminal()
-							.removeListener(LibterminalFragment.this);
-						mLibterminalService.getTerminal().stop();
+						mTerminalAPI.removeListener(LibterminalFragment.this);
+						mTerminalAPI.stop();
 						Toast.makeText(getContext().getApplicationContext(),
 							"Terminal apagada",
 							Toast.LENGTH_SHORT).show();

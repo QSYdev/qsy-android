@@ -1,34 +1,28 @@
 package com.qsy.terminal;
 
+import android.support.annotation.Nullable;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.TextView;
 
+import com.qsy.terminal.fragments.ExecutionFragment;
 import com.qsy.terminal.services.LibterminalService;
 
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
-public class ExecutionActivity extends AppCompatActivity implements EventListener {
+public class ExecutionActivity extends AppCompatActivity implements EventListener,
+		ExecutionFragment.OnFragmentInteractionListener {
 
 	private final EventHandler eventHandler = new InternalEventHandler();
 
 	private LibterminalService libterminalService;
 	private ExecutionActivityConnection mConnection = new ExecutionActivityConnection();
-	private boolean mRoutineWasCanceled = false;
-	private Chronometer mChronometer;
-	private TextView mStatus;
+	private ExecutionFragment mExecFragment;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,21 +33,9 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 		intent.setAction("on");
 		bindService(intent, mConnection, 0);
 
-		Button button = (Button) findViewById(R.id.cancelButton);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				// TODO: Poner primero un cuadro de confirmación
-				libterminalService.getTerminal().stopExecution();
-				doStopRoutine(true);
-				ExecutionActivity.this.finish();
-			}
-		});
-		mChronometer = (Chronometer) findViewById(R.id.chronometer2);
-		mChronometer.start();
-
-		mStatus = (TextView) findViewById(R.id.statusText);
-		mStatus.setText(R.string.status_running);
+		mExecFragment = new ExecutionFragment();
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_frame, mExecFragment)
+				.commit();
 	}
 
 	@Override
@@ -79,18 +61,17 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 		 * Tener en cuenta que esto se llama desde el hilo de Libterminal, lo cual no se si es
 		 * legal. Si algo raro pasa, mirar acá!
 		 */
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                event.acceptHandler(eventHandler);
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				event.acceptHandler(eventHandler);
             }
         });
 	}
 
-	private void doStopRoutine(boolean cancel) {
-		mChronometer.stop();
-		mStatus.setText(R.string.status_finished);
-		mRoutineWasCanceled = cancel;
+	@Override
+	public void routineCanceled() {
+		libterminalService.getTerminal().stopExecution();
 	}
 
 	private final class ExecutionActivityConnection implements ServiceConnection {

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		int id = item.getItemId();
 		FragmentManager fm = getSupportFragmentManager();
 		if (id == R.id.action_nodes) {
-			mLibterminalFragment = LibterminalFragment.newInstance(libterminalService);
+			mLibterminalFragment = LibterminalFragment.newInstance(libterminalService.getTerminal());
 			fm.beginTransaction().replace(R.id.content_main,
 				mLibterminalFragment).commit();
 		}
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		public void onServiceConnected(final ComponentName componentName, final IBinder iBinder) {
 			LibterminalService.LocalBinder binder = (LibterminalService.LocalBinder) iBinder;
 			libterminalService = (LibterminalService) binder.getService();
-			mLibterminalFragment.setLibterminalService(libterminalService);
+			mLibterminalFragment.setTerminalAPI(libterminalService.getTerminal());
 			Toast.makeText(MainActivity.this, "Se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
 		}
 
