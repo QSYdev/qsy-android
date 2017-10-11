@@ -131,31 +131,86 @@
             style="@style/FormTitle"
             android:text="@string/other_configs"/>
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/wait_for_all_sc"
-            style="@style/FormSwitchCompat"
-            android:text="@string/wait_for_all"/>
+        <RelativeLayout
+            style="@style/FormFieldLayout"
+            android:id="@+id/wait_for_all_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/wait_for_all_sc"
+                style="@style/FormSwitchCompat"
+                android:text="@string/wait_for_all"/>
+
+            <TextView
+                style="@style/FormFieldDescription"
+                android:id="@+id/wait_for_all_tv"
+                android:layout_alignBottom="@+id/wait_for_all_sc"
+                android:text="@string/wait_for_all_description"/>
+        </RelativeLayout>
 
         <View style="@style/FormDivider"/>
+
+        <RelativeLayout
+            style="@style/FormFieldLayout"
+            android:id="@+id/stop_on_timeout_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/stop_on_timeout_sc"
             style="@style/FormSwitchCompat"
             android:text="@string/stop_on_timeout"/>
 
+            <TextView
+                style="@style/FormFieldDescription"
+                android:id="@+id/stop_on_timeout_tv"
+                android:layout_alignBottom="@+id/stop_on_timeout_sc"
+                android:text="@string/stop_on_timeout_description"/>
+
+        </RelativeLayout>
+
         <View style="@style/FormDivider"/>
+
+        <RelativeLayout
+            style="@style/FormFieldLayout"
+            android:id="@+id/sound_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/sound_sc"
             style="@style/FormSwitchCompat"
             android:text="@string/routine_sound"/>
 
+            <TextView
+                style="@style/FormFieldDescription"
+                android:id="@+id/sound_tv"
+                android:layout_alignBottom="@+id/sound_sc"
+                android:text="@string/sound_description"/>
+
+        </RelativeLayout>
+
         <View style="@style/FormDivider"/>
+
+        <RelativeLayout
+            style="@style/FormFieldLayout"
+            android:id="@+id/touch_node_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/touch_node_sc"
             style="@style/FormSwitchCompat"
             android:text="@string/touch_node"/>
+
+            <TextView
+                style="@style/FormFieldDescription"
+                android:id="@+id/touch_node_tv"
+                android:layout_alignBottom="@+id/touch_node_sc"
+                android:text="@string/touch_node_description"/>
+
+        </RelativeLayout>
 
         <View style="@style/FormDivider"/>
 
