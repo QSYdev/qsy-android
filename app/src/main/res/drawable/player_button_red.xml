@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="rectangle">
-            <corners android:radius="3dip"/>
+        <shape android:shape="oval">
+            <corners android:radius="1dip"/>
             <solid android:width="1dip" android:color="@color/player_red"/>
         </shape>
     </item>

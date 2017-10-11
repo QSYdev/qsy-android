@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import libterminal.lib.routine.Color;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
-import libterminal.patterns.visitor.EventHandle;
 import libterminal.patterns.visitor.EventHandler;
 
 public class PlayerExecutorFragment extends Fragment implements EventListener {
@@ -43,14 +42,18 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private Button mPlayerRedButton;
 	private Button mPlayerGreenButton;
 	private Button mPlayerBlueButton;
+	private Button mPlayerCyanButton;
+	private Button mPlayerMagentaButton;
 	private boolean mPlayerRedOn;
 	private boolean mPlayerGreenOn;
 	private boolean mPlayerBlueOn;
+	private boolean mPlayerCyanOn;
+	private boolean mPlayerMagentaOn;
 	private Spinner mAmountOfNodesSpinner;
 	private EditText mAmountOfStepsEditText;
 	private Button mRoutineDurationButton;
 	private SwitchCompat mWaitForAllSwitchCompat;
-	private SwitchCompat mStopOnTiemoutSwitchCompat;
+	private SwitchCompat mStopOnTimeOutSwitchCompat;
 	private SwitchCompat mSoundSwitchCompat;
 	private SwitchCompat mTouchNodeSwitchCompat;
 	private Button mNodeDelayButton;
@@ -91,6 +94,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mPlayerRedButton = (Button) rootView.findViewById(R.id.player_button_red);
 		mPlayerGreenButton = (Button) rootView.findViewById(R.id.player_button_green);
 		mPlayerBlueButton = (Button) rootView.findViewById(R.id.player_button_blue);
+		mPlayerCyanButton = (Button) rootView.findViewById(R.id.player_button_cyan);
+		mPlayerMagentaButton = (Button) rootView.findViewById(R.id.player_button_magenta);
 		setupOnClickListeners();
 
 		mRoutineDurationTextView = (TextView) rootView.findViewById(R.id.routine_duration_tv);
@@ -101,7 +106,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mStepTimeoutTextView.setText(getString(R.string.timeout_in_miliseconds, 0));
 
 		mWaitForAllSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.wait_for_all_sc);
-		mStopOnTiemoutSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.stop_on_timeout_sc);
+		mStopOnTimeOutSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.stop_on_timeout_sc);
 		mSoundSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.sound_sc);
 		mTouchNodeSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.touch_node_sc);
 		setupSwitchCompatListeners();
@@ -113,8 +118,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mNodeDelayValue = new BigInteger(String.valueOf(500));
 		mNodeDelayTextView.setText(getString(R.string.delay_in_miliseconds, 500));
 
-		mPlayerBlueButton.setText(getString(R.string.button_on));
-		mPlayerBlueOn = true;
+		mPlayerCyanButton.setText(getString(R.string.button_on));
+		mPlayerCyanOn = true;
 
 		mStepTimeoutValue = new BigInteger(String.valueOf(0));
 
@@ -158,7 +163,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				mWaitForAllValue = b;
 			}
 		});
-		mStopOnTiemoutSwitchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		mStopOnTimeOutSwitchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 				mStopOnTimeoutValue = b;
@@ -217,6 +222,30 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				} else {
 					mPlayerBlueButton.setText(getString(R.string.button_off));
 					mPlayerBlueOn = false;
+				}
+			}
+		});
+		mPlayerCyanButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (!mPlayerCyanOn) {
+					mPlayerCyanButton.setText(getString(R.string.button_on));
+					mPlayerCyanOn = true;
+				} else {
+					mPlayerCyanButton.setText(getString(R.string.button_off));
+					mPlayerCyanOn = false;
+				}
+			}
+		});
+		mPlayerMagentaButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (!mPlayerMagentaOn) {
+					mPlayerMagentaButton.setText(getString(R.string.button_on));
+					mPlayerMagentaOn = true;
+				} else {
+					mPlayerMagentaButton.setText(getString(R.string.button_off));
+					mPlayerMagentaOn = false;
 				}
 			}
 		});
@@ -295,6 +324,10 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 					playersAndColors.add(Color.BLUE);
 				if (mPlayerGreenOn)
 					playersAndColors.add(Color.GREEN);
+				if (mPlayerCyanOn)
+					playersAndColors.add(Color.CYAN);
+				if (mPlayerMagentaOn)
+					playersAndColors.add(Color.VIOLET);
 
 				if (mLibterminalService.getTerminal().connectedNodesAmount() < 1) {
 					Toast.makeText(getContext().getApplicationContext(),

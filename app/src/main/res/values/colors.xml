@@ -10,4 +10,6 @@
     <color name="player_blue">#044299</color>
     <color name="player_red">#9f0707</color>
     <color name="player_green">#0c810c</color>
+    <color name="player_magenta">#960585</color>
+    <color name="player_cyan">#006064</color>
 </resources>

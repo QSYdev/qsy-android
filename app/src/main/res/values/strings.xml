@@ -27,7 +27,7 @@
     <string name="configure_players">Configurar jugadores</string>
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
-    <string name="player_number">Jugador %1$d</string>
+    <string name="player_number">JUG. %1$d</string>
     <string name="button_off">OFF</string>
     <string name="button_on">ON</string>
     <string name="libterminal_connection">Tortugas</string>
@@ -51,8 +51,6 @@
     <string name="status_standby">Stand by</string>
     <string name="wrong_duration_or_steps">Los pasos o la duración deben ser mayor que cero</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="execution_label">Ejecución</string>
     <string name="wait_for_all_description">Se espera a que se apaguen todas las tortugas.</string>
     <string name="stop_on_timeout_description">Cortar la ejecución cuando un jugador no apaga su tortuga.</string>
