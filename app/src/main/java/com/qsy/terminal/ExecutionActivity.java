@@ -59,16 +59,7 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 
 	@Override
 	public void receiveEvent(final Event event) {
-		/*
-		 * Tener en cuenta que esto se llama desde el hilo de Libterminal, lo cual no se si es
-		 * legal. Si algo raro pasa, mirar acá!
-		 */
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				event.acceptHandler(eventHandler);
-			}
-		});
+		event.acceptHandler(eventHandler);
 	}
 
 	@Override
@@ -100,13 +91,7 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 		@Override
 		public void handle(final Event.RoutineFinishedEvent routineFinishedEvent) {
 			super.handle(routineFinishedEvent);
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					mExecFragment.stopChronometer();
-				}
-			});
-			AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
+			final AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
 			builder.setTitle(R.string.routine_finished);
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
 			builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -116,7 +101,13 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 					ExecutionActivity.this.finish();
 				}
 			});
-			builder.create().show();
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					mExecFragment.stopChronometer();
+					builder.create().show();
+				}
+			});
 		}
 	}
 }
