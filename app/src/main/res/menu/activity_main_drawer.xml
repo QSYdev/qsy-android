@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+        <item android:title="@string/configuration">
+            <menu>
+                <item
+                    android:id="@+id/node_configuration"
+                    android:title="@string/action_nodes"/>
+            </menu>
+        </item>
         <item android:title="@string/routines_title">
             <menu>
                 <item

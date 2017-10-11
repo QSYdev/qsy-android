@@ -50,6 +50,7 @@
     <string name="status_finished">Terminada</string>
     <string name="status_standby">Stand by</string>
     <string name="wrong_duration_or_steps">Los pasos o la duración deben ser mayor que cero</string>
+    <string name="configuration">Configuración</string>
 
     <string name="execution_label">Ejecución</string>
     <string name="wait_for_all_description">Se espera a que se apaguen todas las tortugas.</string>

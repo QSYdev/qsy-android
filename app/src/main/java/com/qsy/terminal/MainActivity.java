@@ -102,13 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		FragmentManager fm = getSupportFragmentManager();
-		if (id == R.id.action_nodes) {
-			mLibterminalFragment = LibterminalFragment.newInstance(libterminalService.getTerminal());
-			fm.beginTransaction().replace(R.id.content_main,
-				mLibterminalFragment).commit();
-		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -119,6 +112,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		FragmentManager fm = getSupportFragmentManager();
 
 		switch (id) {
+			case R.id.node_configuration:
+				if (libterminalService == null) {
+					mLibterminalFragment = new LibterminalFragment();
+					fm.beginTransaction().replace(R.id.content_main, mLibterminalFragment).
+						addToBackStack("LibterminalFragment").commit();
+					break;
+				}
+				mLibterminalFragment = LibterminalFragment.newInstance(libterminalService.getTerminal());
+				fm.beginTransaction().replace(R.id.content_main, mLibterminalFragment).
+					addToBackStack("LibterminalFragment").commit();
+				break;
 			case R.id.nav_custom_executor:
 				break;
 			case R.id.nav_player_executor:
@@ -128,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 						Toast.LENGTH_SHORT).show();
 					break;
 				}
-				if(!libterminalService.getTerminal().isUp()) {
+				if (!libterminalService.getTerminal().isUp()) {
 					Toast.makeText(getApplicationContext(),
 						getString(R.string.libterminal_not_up),
 						Toast.LENGTH_LONG).show();
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					PlayerExecutorFragment.newInstance(libterminalService);
 
 				fm.beginTransaction().replace(R.id.content_main,
-					playerExecutorFragment).commit();
+					playerExecutorFragment).addToBackStack("PlayerExecutorFragment").commit();
 				break;
 		}
 
