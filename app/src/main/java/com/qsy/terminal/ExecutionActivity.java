@@ -11,8 +11,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.qsy.terminal.fragments.ExecutionFragment;
+import com.qsy.terminal.fragments.PlayerResultsFragment;
 import com.qsy.terminal.services.LibterminalService;
 
+import libterminal.lib.results.PlayersResults;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
@@ -74,6 +76,12 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 	@Override
 	public void routineCanceled() {
 		libterminalService.getTerminal().stopExecution();
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				mExecFragment.stopChronometer();
+			}
+		});
 	}
 
 	private final class ExecutionActivityConnection implements ServiceConnection {
@@ -112,8 +120,11 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 			builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO: ir a la pestaña de results
-					ExecutionActivity.this.finish();
+					PlayersResults r = (PlayersResults) routineFinishedEvent.getResults();
+					getSupportFragmentManager().
+						beginTransaction().
+						replace(R.id.fragment_frame, PlayerResultsFragment.newInstance(r)).
+						commit();
 				}
 			});
 			builder.create().show();
