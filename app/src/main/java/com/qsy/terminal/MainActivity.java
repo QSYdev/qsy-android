@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.qsy.terminal.fragments.executors.CustomExecutorFragment;
 import com.qsy.terminal.fragments.libterminal.LibterminalFragment;
 import com.qsy.terminal.fragments.executors.PlayerExecutorFragment;
 import com.qsy.terminal.services.LibterminalService;
@@ -124,6 +125,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					addToBackStack("LibterminalFragment").commit();
 				break;
 			case R.id.nav_custom_executor:
+				if (libterminalService == null) {
+					Toast.makeText(MainActivity.this,
+						"No esta la terminal enlazada",
+						Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if (!libterminalService.getTerminal().isUp()) {
+					Toast.makeText(getApplicationContext(),
+						getString(R.string.libterminal_not_up),
+						Toast.LENGTH_LONG).show();
+					break;
+				}
+				CustomExecutorFragment cef = CustomExecutorFragment.newInstance(
+					libterminalService.getTerminal());
+				fm.beginTransaction().replace(R.id.content_main,
+					cef).addToBackStack("CustomExecutorFragment").commit();
 				break;
 			case R.id.nav_player_executor:
 				if (libterminalService == null) {

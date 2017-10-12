@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Controlador de tortugas</string>
 
     <string name="navigation_drawer_open">Abrir menú de navegación</string>
@@ -57,4 +57,21 @@
     <string name="stop_on_timeout_description">Cortar la ejecución cuando un jugador no apaga su tortuga.</string>
     <string name="sound_description">Hacer un sonido cuando se prende la tortuga.</string>
     <string name="touch_node_description">Apagar la tortuga únicamente cuando se la toca.</string>
+
+    <string name="routine_title">Elegir rutina</string>
+    <string name="routine_info">Información de la rutina</string>
+
+    <plurals name="custom_number_of_nodes">
+        <item quantity="one">Se utilizará una tortuga.</item>
+        <item quantity="other">Se utilizarán %1$d tortugas.</item>
+    </plurals>
+    <plurals name="custom_number_of_steps">
+        <item quantity="one">Se ejecutará un paso.</item>
+        <item quantity="other">Se ejecutarán %1$d pasos.</item>
+    </plurals>
+    <plurals name="custom_total_time_out">
+        <item quantity="one">La rutina durará 1 segundo.</item>
+        <item quantity="other">La rutina durará %1$d segundos.</item>
+    </plurals>
+    <string name="failed_open_file">No se pudo obtener las rutinas.</string>
 </resources>
