@@ -23,6 +23,53 @@
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"/>
 
+        <TextView
+            android:id="@+id/custom_configs_tv"
+            style="@style/FormTitle"
+            android:text="@string/other_configs"/>
+
+        <RelativeLayout
+            android:id="@+id/custom_sound_rl"
+            style="@style/FormFieldLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/custom_sound_sc"
+                style="@style/FormSwitchCompat"
+                android:text="@string/routine_sound"/>
+
+            <TextView
+                android:id="@+id/custom_sound_tv"
+                style="@style/FormFieldDescription"
+                android:layout_alignBottom="@+id/custom_sound_sc"
+                android:text="@string/sound_description"/>
+
+        </RelativeLayout>
+
+        <View style="@style/FormDivider"/>
+
+        <RelativeLayout
+            android:id="@+id/custom_touch_node_rl"
+            style="@style/FormFieldLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/custom_touch_node_sc"
+                style="@style/FormSwitchCompat"
+                android:text="@string/touch_node"/>
+
+            <TextView
+                android:id="@+id/custom_touch_node_tv"
+                style="@style/FormFieldDescription"
+                android:layout_alignBottom="@+id/custom_touch_node_sc"
+                android:text="@string/touch_node_description"/>
+
+        </RelativeLayout>
+
+        <View style="@style/FormDivider"/>
+
         <LinearLayout
             android:id="@+id/routine_info_ll"
             android:layout_width="match_parent"
@@ -32,32 +79,35 @@
             <TextView
                 android:id="@+id/routine_info_tv"
                 style="@style/FormTitle"
-                android:text="@string/routine_info" />
+                android:text="@string/routine_info"/>
 
             <TextView
                 android:id="@+id/custom_number_of_nodes"
+                style="@style/CustomFormInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/custom_number_of_steps"
+                style="@style/CustomFormInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/custom_total_time_out"
+                style="@style/CustomFormInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
         <Button
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/start_custom_routine"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/start_routine"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center|bottom"
+            android:text="@string/start_routine"/>
 
     </LinearLayout>
 </ScrollView>

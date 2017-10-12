@@ -74,4 +74,5 @@
         <item quantity="other">La rutina durará %1$d segundos.</item>
     </plurals>
     <string name="failed_open_file">No se pudo obtener las rutinas.</string>
+    <string name="time_not_configured">No se configuró el tiempo.</string>
 </resources>

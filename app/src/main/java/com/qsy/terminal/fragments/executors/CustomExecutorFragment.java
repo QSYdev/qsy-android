@@ -2,16 +2,16 @@ package com.qsy.terminal.fragments.executors;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 
 import libterminal.api.TerminalAPI;
 import libterminal.lib.routine.Routine;
@@ -38,6 +37,8 @@ public class CustomExecutorFragment extends Fragment {
 	private TextView mTotalTimeOutTV;
 	private Spinner mRoutineSP;
 	private Button mStartRoutineBT;
+	private SwitchCompat mSoundSC;
+	private SwitchCompat mTouchSC;
 
 	private Routine mRoutine = null;
 	private String[] names;
@@ -85,6 +86,9 @@ public class CustomExecutorFragment extends Fragment {
 		mNumberOfStepsTV = (TextView) rootView.findViewById(R.id.custom_number_of_steps);
 		mTotalTimeOutTV = (TextView) rootView.findViewById(R.id.custom_total_time_out);
 
+		mSoundSC = (SwitchCompat)  rootView.findViewById(R.id.custom_sound_sc);
+		mTouchSC = (SwitchCompat)  rootView.findViewById(R.id.custom_touch_node_sc);
+
 		mStartRoutineBT = (Button) rootView.findViewById(R.id.start_custom_routine);
 		setupOnClickListeners();
 
@@ -98,9 +102,16 @@ public class CustomExecutorFragment extends Fragment {
 		mStartRoutineBT.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO: configuracion de sonido y tocar
-				mTerminal.executeCustom(mRoutine, null, false, false);
+				if(mTerminal.connectedNodesAmount() < (int)mRoutine.getNumberOfNodes()) {
+					Toast.makeText(getContext().getApplicationContext(),
+						getString(R.string.not_enough_connected_nodes),
+						Toast.LENGTH_SHORT).show();
+					return;
+				}
+
+				mTerminal.executeCustom(mRoutine, null, mSoundSC.isChecked(), mTouchSC.isChecked());
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
+				intent.putExtra("TYPE", "CUSTOM");
 				startActivity(intent);
 			}
 		});
@@ -130,7 +141,6 @@ public class CustomExecutorFragment extends Fragment {
 
 	private void routineData(int position) {
 		try {
-			Log.d("ROUTINE", getContext().getApplicationContext().getCacheDir() + "/" + names[position]);
 			mRoutine = RoutineManager.loadRoutine(getContext().getApplicationContext().getCacheDir() + "/" + names[position]);
 		} catch (IOException e) {
 			Toast.makeText(getContext().getApplicationContext(),
@@ -144,7 +154,12 @@ public class CustomExecutorFragment extends Fragment {
 		mNumberOfNodesTV.setVisibility(View.VISIBLE);
 		mNumberOfStepsTV.setText(getResources().getQuantityString(R.plurals.custom_number_of_steps, mRoutine.getSteps().size(), mRoutine.getSteps().size()));
 		mNumberOfStepsTV.setVisibility(View.VISIBLE);
-		mTotalTimeOutTV.setText(getResources().getQuantityString(R.plurals.custom_total_time_out, (int)mRoutine.getTotalTimeOut()/1000, (int)mRoutine.getTotalTimeOut()/1000));
+		int secs = (int)mRoutine.getTotalTimeOut()/1000;
+		if(secs == 0) {
+			mTotalTimeOutTV.setText(getString(R.string.time_not_configured));
+		} else {
+			mTotalTimeOutTV.setText(getResources().getQuantityString(R.plurals.custom_total_time_out, secs, secs));
+		}
 		mTotalTimeOutTV.setVisibility(View.VISIBLE);
 	}
 

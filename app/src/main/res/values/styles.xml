@@ -83,4 +83,9 @@
         <item name="android:paddingStart">9dp</item>
     </style>
 
+    <style name="CustomFormInfo" parent="FormFields">
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
 </resources>
