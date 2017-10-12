@@ -334,6 +334,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 					return;
 				}
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
+				intent.putExtra("TYPE", "PLAYER");
 				startActivity(intent);
 			}
 		});

@@ -11,14 +11,10 @@ import android.widget.TextView;
 
 import com.qsy.terminal.R;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 import libterminal.lib.results.ActionLog;
 import libterminal.lib.results.PlayersResults;
-import libterminal.lib.routine.Color;
 
 public class PlayerResultsFragment extends Fragment {
 
@@ -36,46 +32,44 @@ public class PlayerResultsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.player_results, container, false);
 		LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.results_ll);
 
-		HashMap<Color, String> colors = new HashMap<Color, String>();
-		colors.put(Color.RED, "ROJO");colors.put(Color.BLUE, "AZUL");
-		colors.put(Color.YELLOW, "AMARILLO");colors.put(Color.GREEN, "VERDE");
-		colors.put(Color.VIOLET, "VIOLETA");colors.put(Color.CYAN, "CYAN");
-		colors.put(Color.WHITE, "BLANCO");
-
-		ArrayList<Color> pcs = mResults.getPlayersAndColors();
-
 		List<ActionLog> l = mResults.getExecutionLog();
-		int currentStepId = 0;
+		int stepId = 0;
+		int currentStepId;
+		// TODO: print the starting time
 		for (ActionLog log : l) {
-			boolean winner = false;
 			if (log instanceof ActionLog.PlayerToucheActionLog) {
 				int pid = ((ActionLog.PlayerToucheActionLog) log).getPlayerId();
-				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-				if(((ActionLog.PlayerToucheActionLog) log).getStepId() != currentStepId) {
-					currentStepId = ((ActionLog.PlayerToucheActionLog) log).getStepId();
-					tv.setText("Paso "+currentStepId+" - GANO "+colors.get(pcs.get(pid)));
+				String color = mResults.getPlayersAndColors().get(pid).toString();
+				currentStepId = ((ActionLog.PlayerToucheActionLog) log).getStepId();
+				if (currentStepId != stepId) {
+					stepId = currentStepId;
+					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
+					tv.setText("Paso " + stepId + " - Gano jugador " + color);
 					linearLayout.addView(tv);
-					winner = true;
 				}
-
-				double sec = ((ActionLog.PlayerToucheActionLog) log).getDelay()/1000.0;
-				TextView ttv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-				tv.setText("     Touche "+colors.get(pcs.get(pid))+": "+sec+" segundos");
-				linearLayout.addView(ttv);
-			} else if (log instanceof ActionLog.StepTimeOutActionLog) {
+				TextView timeTv = (TextView) linearLayout.inflate(getContext(), R.layout.touche_log, null);
+				double seconds = ((ActionLog.PlayerToucheActionLog) log).getDelay()/1000.0;
+				timeTv.setText(color+": "+seconds);
+				linearLayout.addView(timeTv);
+			}
+			if (log instanceof ActionLog.StepTimeOutActionLog) {
+				stepId = ((ActionLog.StepTimeOutActionLog) log).getStepId();
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-				if(!winner) {
-					tv.setText("Paso "+((ActionLog.StepTimeOutActionLog) log).getStepId()+" - TIME OUT");
-				} else {
-					tv.setText("    TIME OUT EN EL PASO "+((ActionLog.StepTimeOutActionLog) log).getStepId());
-				}
+				tv.setText("Paso "+stepId+" incompleto.");
 				linearLayout.addView(tv);
-			} else if (log instanceof ActionLog.StartActionLog) {
-				// TODO
-			} else if (log instanceof ActionLog.RoutineTimeOutActionLog) {
-				// TODO
-			} else if (log instanceof ActionLog.StopActionLog) {
-				// TODO
+				if(mResults.isStopOnTimeout()) {
+					TextView ntv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
+					ntv.setText("Rutina terminada por paso incompleto.");
+					linearLayout.addView(ntv);
+				}
+			}
+			if (log instanceof ActionLog.RoutineTimeOutActionLog) {
+				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.routine_timeout, null);
+				tv.setText("Terminó el tiempo de la rutina.");
+				linearLayout.addView(tv);
+			}
+			if (log instanceof ActionLog.StopActionLog) {
+				// TODO: print time stuff
 			}
 		}
 		return rootView;
