@@ -1,4 +1,4 @@
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="app_name">Controlador de tortugas</string>
 
     <string name="navigation_drawer_open">Abrir menú de navegación</string>
@@ -75,4 +75,5 @@
     </plurals>
     <string name="failed_open_file">No se pudo obtener las rutinas.</string>
     <string name="time_not_configured">No se configuró el tiempo.</string>
+    <string name="results">Resultados</string>
 </resources>
