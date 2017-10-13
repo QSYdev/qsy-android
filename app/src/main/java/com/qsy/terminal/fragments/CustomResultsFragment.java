@@ -37,7 +37,7 @@ public class CustomResultsFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.player_results, container, false);
+		View rootView = inflater.inflate(R.layout.custom_results, container, false);
 		LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.custom_results_ll);
 
 		int stepId = 1;

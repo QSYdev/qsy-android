@@ -37,7 +37,7 @@ import libterminal.patterns.visitor.EventHandler;
 
 public class PlayerExecutorFragment extends Fragment implements EventListener {
 
-    private final EventHandler eventHandler = new InternalEventHandler();
+	private final EventHandler eventHandler = new InternalEventHandler();
 
 	private Button mPlayerRedButton;
 	private Button mPlayerGreenButton;
@@ -335,14 +335,14 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 						Toast.LENGTH_LONG).show();
 					return;
 				}
-				if(!mPlayerBlueOn && !mPlayerGreenOn && !mPlayerRedOn){
+				if (!mPlayerBlueOn && !mPlayerGreenOn && !mPlayerRedOn && !mPlayerCyanOn && !mPlayerMagentaOn) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.no_players_selected),
 						Toast.LENGTH_LONG).show();
 					return;
 				}
 				// TODO: chequear cual seria el tiempo minimo
-				if(mAmountOfStepsValue < 1 && mRoutineDurationValue*1000 < 500) {
+				if (mAmountOfStepsValue < 1 && mRoutineDurationValue * 1000 < 500) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.wrong_duration_or_steps),
 						Toast.LENGTH_LONG).show();
@@ -367,7 +367,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 					return;
 				}
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
-				intent.putExtra("TYPE", "PLAYER");
 				startActivity(intent);
 			}
 		});
@@ -377,12 +376,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	@Override
 	public void receiveEvent(final Event event) {
 		if (getActivity() == null) return;
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                event.acceptHandler(eventHandler);
-            }
-        });
+		event.acceptHandler(eventHandler);
 	}
 
 	private void setLibterminalService(LibterminalService libterminalService) {
@@ -391,16 +385,26 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 	private final class InternalEventHandler extends EventHandler {
 
-        @Override
-        public void handle(final Event.NewNodeEvent newNodeEvent) {
-            super.handle(newNodeEvent);
-            setAmountOfNodesSpinner();
-        }
+		@Override
+		public void handle(final Event.NewNodeEvent newNodeEvent) {
+			super.handle(newNodeEvent);
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					setAmountOfNodesSpinner();
+				}
+			});
+		}
 
-        @Override
-        public void handle(final Event.DisconnectedNodeEvent disconnectedNodeEvent) {
-            super.handle(disconnectedNodeEvent);
-            setAmountOfNodesSpinner();
-        }
-    }
+		@Override
+		public void handle(final Event.DisconnectedNodeEvent disconnectedNodeEvent) {
+			super.handle(disconnectedNodeEvent);
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					setAmountOfNodesSpinner();
+				}
+			});
+		}
+	}
 }

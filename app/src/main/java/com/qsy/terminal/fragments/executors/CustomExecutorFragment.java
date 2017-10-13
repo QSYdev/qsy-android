@@ -111,7 +111,6 @@ public class CustomExecutorFragment extends Fragment {
 
 				mTerminal.executeCustom(mRoutine, null, mSoundSC.isChecked(), mTouchSC.isChecked());
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
-				intent.putExtra("TYPE", "CUSTOM");
 				startActivity(intent);
 			}
 		});
