@@ -54,8 +54,7 @@ public class PlayerResultsFragment extends Fragment {
 				double seconds = ((ActionLog.PlayerToucheActionLog) log).getDelay()/1000.0;
 				timeTv.setText(color+": "+seconds);
 				linearLayout.addView(timeTv);
-			}
-			if (log instanceof ActionLog.StepTimeOutActionLog) {
+			} else if (log instanceof ActionLog.StepTimeOutActionLog) {
 				stepId = ((ActionLog.StepTimeOutActionLog) log).getStepId();
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 				tv.setText("Paso "+stepId+" incompleto.");
@@ -65,13 +64,11 @@ public class PlayerResultsFragment extends Fragment {
 					ntv.setText("Rutina terminada por paso incompleto.");
 					linearLayout.addView(ntv);
 				}
-			}
-			if (log instanceof ActionLog.RoutineTimeOutActionLog) {
+			} else if (log instanceof ActionLog.RoutineTimeOutActionLog) {
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.routine_timeout, null);
 				tv.setText("Terminó el tiempo de la rutina.");
 				linearLayout.addView(tv);
-			}
-			if (log instanceof ActionLog.StopActionLog) {
+			} else if (log instanceof ActionLog.StopActionLog) {
 				// TODO: print time stuff
 			}
 		}
@@ -80,7 +77,7 @@ public class PlayerResultsFragment extends Fragment {
 		bt.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mListener.resultsDone();
+				mListener.playerResultsDone();
 			}
 		});
 		linearLayout.addView(bt);
@@ -105,6 +102,6 @@ public class PlayerResultsFragment extends Fragment {
 	}
 
 	public interface OnFragmentInteractionListener {
-		void resultsDone();
+		void playerResultsDone();
 	}
 }

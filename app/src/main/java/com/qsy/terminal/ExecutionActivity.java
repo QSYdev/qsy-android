@@ -22,7 +22,8 @@ import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
 public class ExecutionActivity extends AppCompatActivity implements EventListener,
-	ExecutionFragment.OnFragmentInteractionListener, PlayerResultsFragment.OnFragmentInteractionListener {
+	ExecutionFragment.OnFragmentInteractionListener, PlayerResultsFragment.OnFragmentInteractionListener,
+	CustomResultsFragment.OnFragmentInteractionListener {
 
 	private final EventHandler eventHandler = new InternalEventHandler();
 
@@ -95,9 +96,18 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 		});
 	}
 
-	@Override
-	public void resultsDone() {
+	private void resultsDone() {
 		ExecutionActivity.this.finish();
+	}
+
+	@Override
+	public void playerResultsDone() {
+		resultsDone();
+	}
+
+	@Override
+	public void customResultsDone() {
+		resultsDone();
 	}
 
 	private final class ExecutionActivityConnection implements ServiceConnection {
