@@ -1,0 +1,1031 @@
+{
+  "playerCount": 1,
+  "numberOfNodes": 2,
+  "totalTimeOut": 0,
+  "steps": [
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 12500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 12350,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 12200,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 12050,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 11900,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 11750,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 11600,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 11450,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 11300,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 11150,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 11000,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 10850,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 10700,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 10550,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 10400,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 10250,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 10100,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 9950,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 9800,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 9650,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 9500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 9350,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 9200,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 9050,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 8900,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 8750,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 8600,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 8450,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 8300,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 8150,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 8000,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 7850,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 7700,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 7550,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 7400,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 7250,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 7100,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 6950,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 6800,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 6650,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 6500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 6350,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 6200,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 6050,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 5900,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 5750,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 5600,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 5450,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 5300,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 5150,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 5000,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 4850,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 4700,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 4550,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 4400,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 4250,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 4100,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 3950,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 3800,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 3650,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 3500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 3350,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 3200,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 1000,
+      "stopOnTimeout": true,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 3050,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    }
+  ]
+}
