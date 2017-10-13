@@ -1,11 +1,14 @@
 package com.qsy.terminal.fragments.executors;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codetroopers.betterpickers.OnDialogDismissListener;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
@@ -35,7 +40,7 @@ import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
-public class PlayerExecutorFragment extends Fragment implements EventListener {
+public class PlayerExecutorFragment extends Fragment implements EventListener, NumberPicker.OnValueChangeListener {
 
 	private final EventHandler eventHandler = new InternalEventHandler();
 
@@ -44,13 +49,13 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private Button mPlayerBlueButton;
 	private Button mPlayerCyanButton;
 	private Button mPlayerMagentaButton;
+	private Button mAmountOfStepsButton;
 	private boolean mPlayerRedOn;
 	private boolean mPlayerGreenOn;
 	private boolean mPlayerBlueOn;
 	private boolean mPlayerCyanOn;
 	private boolean mPlayerMagentaOn;
 	private Spinner mAmountOfNodesSpinner;
-	private EditText mAmountOfStepsEditText;
 	private Button mRoutineDurationButton;
 	private SwitchCompat mWaitForAllSwitchCompat;
 	private SwitchCompat mStopOnTimeOutSwitchCompat;
@@ -67,6 +72,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private boolean mSoundValue;
 	private boolean mTouchNodeValue;
 	private int mAmountOfStepsValue;
+	private TextView mAmountOfStepsTV;
 	private TextView mNodeDelayTextView;
 	private TextView mStepTimeoutTextView;
 	private TextView mRoutineDurationTextView;
@@ -87,6 +93,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mAmountOfNodesSpinner = (Spinner) rootView.findViewById(R.id.amount_of_nodes_spinner);
 		setAmountOfNodesSpinnerListener();
 
+		mAmountOfStepsButton = (Button) rootView.findViewById(R.id.amount_of_steps_bt);
 		mRoutineDurationButton = (Button) rootView.findViewById(R.id.routine_duration_bt);
 		mNodeDelayButton = (Button) rootView.findViewById(R.id.node_delay_bt);
 		mStepTimeoutButton = (Button) rootView.findViewById(R.id.step_timeout_bt);
@@ -98,6 +105,10 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mPlayerMagentaButton = (Button) rootView.findViewById(R.id.player_button_magenta);
 		setupOnClickListeners();
 
+		mAmountOfStepsTV = (TextView) rootView.findViewById(R.id.amount_of_steps_tv);
+		mAmountOfStepsTV.setText(getResources().getQuantityString(R.plurals.amount_of_steps,
+			mAmountOfStepsValue, mAmountOfStepsValue));
+		mAmountOfStepsValue = 0;
 		mRoutineDurationTextView = (TextView) rootView.findViewById(R.id.routine_duration_tv);
 		mRoutineDurationTextView.setText(getString(R.string.routine_duration_in_seconds, 0));
 		mNodeDelayTextView = (TextView) rootView.findViewById(R.id.node_delay_tv);
@@ -111,9 +122,9 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mTouchNodeSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.touch_node_sc);
 		setupSwitchCompatListeners();
 
-		mAmountOfStepsEditText = (EditText) rootView.findViewById(R.id.amount_of_steps_et);
-
 		setAmountOfNodesSpinner();
+
+		mRoutineDurationValue = 0;
 
 		mNodeDelayValue = new BigInteger(String.valueOf(500));
 		mNodeDelayTextView.setText(getString(R.string.delay_in_miliseconds, 500));
@@ -122,7 +133,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mPlayerCyanOn = true;
 
 		mStepTimeoutValue = new BigInteger(String.valueOf(0));
-
 		return rootView;
 	}
 
@@ -254,6 +264,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			public void onClick(View view) {
 				HmsPickerBuilder hpb = new HmsPickerBuilder()
 					.setFragmentManager(getActivity().getSupportFragmentManager())
+					.setTimeInSeconds(mRoutineDurationValue)
 					.addHmsPickerDialogHandler(new HmsPickerDialogFragment.HmsPickerDialogHandlerV2() {
 						@Override
 						public void onDialogHmsSet(int reference, boolean isNegative, int hours, int minutes, int seconds) {
@@ -275,6 +286,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				NumberPickerBuilder npb = new NumberPickerBuilder()
 					.setFragmentManager(getActivity().getSupportFragmentManager())
 					.setStyleResId(R.style.BetterPickersDialogFragment_Light)
+					.setCurrentNumber(mNodeDelayValue.intValue())
 					.addNumberPickerDialogHandler(new NumberPickerDialogFragment.NumberPickerDialogHandlerV2() {
 						@Override
 						public void onDialogNumberSet(int reference, BigInteger number, double decimal, boolean isNegative, BigDecimal fullNumber) {
@@ -295,6 +307,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				NumberPickerBuilder npb = new NumberPickerBuilder()
 					.setFragmentManager(getActivity().getSupportFragmentManager())
 					.setStyleResId(R.style.BetterPickersDialogFragment_Light)
+					.setCurrentNumber(mStepTimeoutValue.intValue())
 					.addNumberPickerDialogHandler(new NumberPickerDialogFragment.NumberPickerDialogHandlerV2() {
 						@Override
 						public void onDialogNumberSet(int reference, BigInteger number, double decimal, boolean isNegative, BigDecimal fullNumber) {
@@ -309,14 +322,36 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				npb.show();
 			}
 		});
+		mAmountOfStepsButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final NumberPicker picker = new NumberPicker(getContext());
+				picker.setMinValue(0);
+				picker.setMaxValue(250);
+				picker.setValue(mAmountOfStepsValue);
+				final FrameLayout layout = new FrameLayout(getContext());
+				layout.addView(picker, new FrameLayout.LayoutParams(
+					FrameLayout.LayoutParams.WRAP_CONTENT,
+					FrameLayout.LayoutParams.WRAP_CONTENT,
+					Gravity.CENTER));
+				new AlertDialog.Builder(getContext())
+					.setView(layout)
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i) {
+							mAmountOfStepsValue = picker.getValue();
+							mAmountOfStepsTV.setText(getResources().getQuantityString(R.plurals.amount_of_steps,
+								mAmountOfStepsValue, mAmountOfStepsValue));
+						}
+					})
+					.setTitle(getString(R.string.amount_of_steps))
+					.setNegativeButton(android.R.string.cancel, null)
+					.show();
+			}
+		});
 		mStartRoutineButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				try {
-					mAmountOfStepsValue = Integer.parseInt(mAmountOfStepsEditText.getText().toString());
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
 				ArrayList<Color> playersAndColors = new ArrayList<Color>();
 				if (mPlayerRedOn)
 					playersAndColors.add(Color.RED);
@@ -381,6 +416,13 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 	private void setLibterminalService(LibterminalService libterminalService) {
 		this.mLibterminalService = libterminalService;
+	}
+
+	@Override
+	public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+		mAmountOfStepsValue = newVal;
+		mAmountOfStepsTV.setText(getResources().getQuantityString(R.plurals.amount_of_steps,
+			mAmountOfStepsValue, mAmountOfStepsValue));
 	}
 
 	private final class InternalEventHandler extends EventHandler {

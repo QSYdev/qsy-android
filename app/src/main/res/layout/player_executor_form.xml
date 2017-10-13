@@ -105,27 +105,23 @@
             android:text="@string/routine_duration_title"/>
 
         <LinearLayout
-            android:layout_width="0px"
-            android:layout_height="0px"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-
-            <requestFocus/>
-        </LinearLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/duration_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/amount_of_steps_et"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/amount_of_steps_bt"
+                style="@style/FormButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/amount_of_steps"
-                android:inputType="number"
-                android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
+                android:text="@string/amount_of_steps"/>
+
+            <TextView
+                style="@style/FormFields"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/amount_of_steps_tv"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -145,6 +141,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/routine_duration_tv"/>
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/other_configs_tv"
