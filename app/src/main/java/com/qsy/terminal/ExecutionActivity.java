@@ -22,7 +22,7 @@ import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
 public class ExecutionActivity extends AppCompatActivity implements EventListener,
-	ExecutionFragment.OnFragmentInteractionListener {
+	ExecutionFragment.OnFragmentInteractionListener, PlayerResultsFragment.OnFragmentInteractionListener {
 
 	private final EventHandler eventHandler = new InternalEventHandler();
 
@@ -93,6 +93,11 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 				mExecFragment.stopChronometer();
 			}
 		});
+	}
+
+	@Override
+	public void resultsDone() {
+		ExecutionActivity.this.finish();
 	}
 
 	private final class ExecutionActivityConnection implements ServiceConnection {

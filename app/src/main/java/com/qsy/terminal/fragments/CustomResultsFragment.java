@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 
 import com.qsy.terminal.R;
 
+import java.util.List;
+
+import libterminal.lib.results.ActionLog;
 import libterminal.lib.results.CustomResults;
 
 public class CustomResultsFragment extends Fragment {
@@ -29,6 +32,12 @@ public class CustomResultsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.player_results, container, false);
+
+		List<ActionLog> l = mResults.getExecutionLog();
+
+		for(ActionLog log : l) {
+
+		}
 
 		return rootView;
 	}
