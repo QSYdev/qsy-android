@@ -21,9 +21,7 @@ import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
-public class LibterminalFragment extends Fragment implements EventListener {
-
-	private final EventHandler eventHandler = new InternalEventHandler();
+public class LibterminalFragment extends Fragment {
 
 	private SwitchCompat mLibterminalStartStopSW;
 	private TerminalAPI mTerminalAPI;
@@ -71,7 +69,6 @@ public class LibterminalFragment extends Fragment implements EventListener {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					mTerminalAPI.addListener(LibterminalFragment.this);
 					mTerminalAPI.startNodesSearch();
 				} else {
 					try {
@@ -79,7 +76,6 @@ public class LibterminalFragment extends Fragment implements EventListener {
 							buttonView.setChecked(false);
 							return;
 						}
-						mTerminalAPI.removeListener(LibterminalFragment.this);
 						mTerminalAPI.stop();
 						Toast.makeText(getContext().getApplicationContext(),
 							"Terminal apagada",
@@ -92,45 +88,4 @@ public class LibterminalFragment extends Fragment implements EventListener {
 		});
 	}
 
-	@Override
-	public void receiveEvent(final Event event) {
-		if (getActivity() == null) return;
-		event.acceptHandler(eventHandler);
-	}
-
-	private final class InternalEventHandler extends EventHandler {
-
-		@Override
-		public void handle(final Event.NewNodeEvent newNodeEvent) {
-			super.handle(newNodeEvent);
-			final Node newNode = newNodeEvent.getNode();
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					Toast.makeText(
-						getContext().getApplicationContext(),
-						getString(R.string.newNode, newNode.getNodeId()),
-						Toast.LENGTH_SHORT)
-						.show();
-				}
-			});
-		}
-
-		@Override
-		public void handle(final Event.DisconnectedNodeEvent disconnectedNodeEvent) {
-			super.handle(disconnectedNodeEvent);
-			final Node disconnectedNode = disconnectedNodeEvent.getNode();
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					Toast.makeText(
-						getContext().getApplicationContext(),
-						getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
-						Toast.LENGTH_SHORT)
-						.show();
-
-				}
-			});
-		}
-	}
 }

@@ -22,8 +22,10 @@ import com.qsy.terminal.fragments.executors.PlayerExecutorFragment;
 import com.qsy.terminal.services.LibterminalService;
 import com.qsy.terminal.utils.QSYUtils;
 
+import libterminal.lib.node.Node;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
+import libterminal.patterns.visitor.EventHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
 	EventListener {
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	private MainActivityConnection mConnection = new MainActivityConnection();
 	private LibterminalService libterminalService;
 	private LibterminalFragment mLibterminalFragment;
+
+	private final EventHandler eventHandler = new InternalEventHandler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			Intent intent = new Intent(MainActivity.this, LibterminalService.class);
 			intent.setAction("off");
 			startService(intent);
+			libterminalService.getTerminal().removeListener(this);
 
 			unbindService(mConnection);
 		}
@@ -156,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					break;
 				}
 				PlayerExecutorFragment playerExecutorFragment =
-					PlayerExecutorFragment.newInstance(libterminalService);
+					PlayerExecutorFragment.newInstance(libterminalService.getTerminal());
 
 				fm.beginTransaction().replace(R.id.content_main,
 					playerExecutorFragment).addToBackStack("PlayerExecutorFragment").commit();
@@ -169,6 +174,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 	@Override
 	public void receiveEvent(final Event event) {
+		event.acceptHandler(eventHandler);
+	}
+
+	private final class InternalEventHandler extends EventHandler {
+
+		@Override
+		public void handle(final Event.NewNodeEvent newNodeEvent) {
+			super.handle(newNodeEvent);
+			final Node newNode = newNodeEvent.getNode();
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(
+						getApplicationContext(),
+						getString(R.string.newNode, newNode.getNodeId()),
+						Toast.LENGTH_SHORT)
+						.show();
+				}
+			});
+		}
+
+		@Override
+		public void handle(final Event.DisconnectedNodeEvent disconnectedNodeEvent) {
+			super.handle(disconnectedNodeEvent);
+			final Node disconnectedNode = disconnectedNodeEvent.getNode();
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(
+						getApplicationContext(),
+						getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
+						Toast.LENGTH_SHORT)
+						.show();
+
+				}
+			});
+		}
 	}
 
 
@@ -179,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			LibterminalService.LocalBinder binder = (LibterminalService.LocalBinder) iBinder;
 			libterminalService = (LibterminalService) binder.getService();
 			mLibterminalFragment.setTerminalAPI(libterminalService.getTerminal());
+			libterminalService.getTerminal().addListener(MainActivity.this);
 			Toast.makeText(MainActivity.this, "Se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
 		}
 
@@ -189,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			libterminalService.getTerminal().removeListener(MainActivity.this);
 			libterminalService = null;
 			Toast.makeText(MainActivity.this, "Se ha desenlazado de la terminal", Toast.LENGTH_LONG).show();
 		}

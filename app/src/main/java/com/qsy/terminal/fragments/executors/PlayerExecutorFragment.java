@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codetroopers.betterpickers.OnDialogDismissListener;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
@@ -35,12 +35,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import libterminal.api.TerminalAPI;
 import libterminal.lib.routine.Color;
 import libterminal.patterns.observer.Event;
 import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
-public class PlayerExecutorFragment extends Fragment implements EventListener, NumberPicker.OnValueChangeListener {
+public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 	private final EventHandler eventHandler = new InternalEventHandler();
 
@@ -78,12 +79,13 @@ public class PlayerExecutorFragment extends Fragment implements EventListener, N
 	private TextView mRoutineDurationTextView;
 	private int mSelectedNode;
 
-	private LibterminalService mLibterminalService;
+	private TerminalAPI mTerminal;
 
-	public static PlayerExecutorFragment newInstance(LibterminalService libterminalService) {
-		PlayerExecutorFragment paf = new PlayerExecutorFragment();
-		paf.setLibterminalService(libterminalService);
-		return paf;
+	public static PlayerExecutorFragment newInstance(TerminalAPI terminalAPI) {
+		PlayerExecutorFragment pef = new PlayerExecutorFragment();
+		pef.mTerminal = terminalAPI;
+		terminalAPI.addListener(pef);
+		return pef;
 	}
 
 	@Nullable
@@ -152,7 +154,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener, N
 
 	@NonNull
 	private void setAmountOfNodesSpinner() {
-		int connectedNodes = mLibterminalService.getTerminal().connectedNodesAmount();
+		int connectedNodes = mTerminal.connectedNodesAmount();
 		Integer[] ints = new Integer[connectedNodes];
 		for (int i = 0; i < connectedNodes; i++) ints[i] = i + 1;
 
@@ -364,7 +366,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener, N
 				if (mPlayerMagentaOn)
 					playersAndColors.add(Color.VIOLET);
 
-				if (mLibterminalService.getTerminal().connectedNodesAmount() < 1) {
+				if (mTerminal.connectedNodesAmount() < 1) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.not_enough_connected_nodes),
 						Toast.LENGTH_LONG).show();
@@ -386,7 +388,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener, N
 				try {
 					// TODO: el primer parametro es la asociacion de nodos. En un futuro
 					// vamos a tener la asociacion a nivel aplicacion
-					mLibterminalService.getTerminal().executePlayer(null, mSelectedNode, playersAndColors,
+					mTerminal.executePlayer(null, mSelectedNode, playersAndColors,
 						mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
 						mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
 						mSoundValue, mTouchNodeValue);
@@ -409,20 +411,18 @@ public class PlayerExecutorFragment extends Fragment implements EventListener, N
 	}
 
 	@Override
-	public void receiveEvent(final Event event) {
-		if (getActivity() == null) return;
-		event.acceptHandler(eventHandler);
-	}
-
-	private void setLibterminalService(LibterminalService libterminalService) {
-		this.mLibterminalService = libterminalService;
+	public void onDestroy() {
+		super.onDestroy();
+		mTerminal.removeListener(this);
 	}
 
 	@Override
-	public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-		mAmountOfStepsValue = newVal;
-		mAmountOfStepsTV.setText(getResources().getQuantityString(R.plurals.amount_of_steps,
-			mAmountOfStepsValue, mAmountOfStepsValue));
+	public void receiveEvent(final Event event) {
+		Log.d("PEF", "before getactivity");
+		if (getActivity() == null) return;
+		Log.d("PEF", "after getactivity");
+		event.acceptHandler(eventHandler);
+		Log.d("PEF", "after getactivity");
 	}
 
 	private final class InternalEventHandler extends EventHandler {
@@ -433,6 +433,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener, N
 			getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					Log.d("PEF", "inside the newNodeEvent handler");
 					setAmountOfNodesSpinner();
 				}
 			});
@@ -444,6 +445,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener, N
 			getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					Log.d("PEF", "inside the disconnectedNodeEvent handler");
 					setAmountOfNodesSpinner();
 				}
 			});
