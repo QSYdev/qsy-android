@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -108,6 +109,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+
+		MenuItem menuItem = menu.findItem(R.id.nodes_counter);
+		if((libterminalService != null) && (libterminalService.getTerminal().isUp())) {
+			menuItem.setTitle(Integer.valueOf(libterminalService.getTerminal().connectedNodesAmount()).toString());
+		}
+
 		return true;
 	}
 
@@ -172,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					playerExecutorFragment).addToBackStack("PlayerExecutorFragment").commit();
 				break;
 			case R.id.debug:
+				Log.d("ASDSADS", "ASDASDSADAS");
 				if (libterminalService == null) {
 					Toast.makeText(MainActivity.this,
 						"No esta la terminal enlazada",
@@ -202,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	@Override
 	public void terminalOff() {
 		mNodes = new ArrayList<Node>();
+		supportInvalidateOptionsMenu();
 	}
 
 	private final class InternalEventHandler extends EventHandler {
@@ -213,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					supportInvalidateOptionsMenu();
 					mNodes.add(newNode);
 					Toast.makeText(
 						getApplicationContext(),
@@ -230,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					supportInvalidateOptionsMenu();
 					mNodes.remove(disconnectedNode);
 					Toast.makeText(
 						getApplicationContext(),
