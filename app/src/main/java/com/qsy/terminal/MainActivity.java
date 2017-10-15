@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 					playerExecutorFragment).addToBackStack("PlayerExecutorFragment").commit();
 				break;
 			case R.id.debug:
-				Log.d("ASDSADS", "ASDASDSADAS");
 				if (libterminalService == null) {
 					Toast.makeText(MainActivity.this,
 						"No esta la terminal enlazada",
@@ -224,11 +222,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				public void run() {
 					supportInvalidateOptionsMenu();
 					mNodes.add(newNode);
-					Toast.makeText(
-						getApplicationContext(),
-						getString(R.string.newNode, newNode.getNodeId()),
-						Toast.LENGTH_SHORT)
-						.show();
 				}
 			});
 		}
@@ -242,12 +235,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				public void run() {
 					supportInvalidateOptionsMenu();
 					mNodes.remove(disconnectedNode);
-					Toast.makeText(
-						getApplicationContext(),
-						getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
-						Toast.LENGTH_SHORT)
-						.show();
-
 				}
 			});
 		}
@@ -265,7 +252,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			libterminalService = (LibterminalService) binder.getService();
 			mLibterminalFragment.setTerminalAPI(libterminalService.getTerminal());
 			libterminalService.getTerminal().addListener(MainActivity.this);
-			Toast.makeText(MainActivity.this, "Se ha enlazado con la terminal", Toast.LENGTH_LONG).show();
 		}
 
 		@Override
@@ -277,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			}
 			libterminalService.getTerminal().removeListener(MainActivity.this);
 			libterminalService = null;
-			Toast.makeText(MainActivity.this, "Se ha desenlazado de la terminal", Toast.LENGTH_LONG).show();
 		}
 	}
 }

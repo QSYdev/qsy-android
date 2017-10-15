@@ -7,9 +7,9 @@
     <color name="gray_fade_out">#f2f4f4</color>
 
     <color name="form_fields_text_color">#686b6b</color>
-    <color name="player_blue">#044299</color>
-    <color name="player_red">#9f0707</color>
-    <color name="player_green">#0c810c</color>
-    <color name="player_magenta">#960585</color>
-    <color name="player_cyan">#006064</color>
+    <color name="player_blue">#0000ff</color>
+    <color name="player_red">#a90707</color>
+    <color name="player_green">#00a700</color>
+    <color name="player_magenta">#ac16ac</color>
+    <color name="player_cyan">#0cd4d4</color>
 </resources>

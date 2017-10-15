@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -220,13 +219,11 @@ public class DebugFragment extends Fragment implements EventListener {
 	}
 
 	private Integer[] getNodeIds() {
-		Log.d("DEBUG", Integer.valueOf(mNodes.size()).toString());
 		Integer[] ints = new Integer[mNodes.size()];
 		int i = 0;
 		for (Node node : mNodes) {
 			ints[i] = node.getNodeId();
 		}
-		Log.d("DEBUG", ints.toString());
 		return ints;
 	}
 
