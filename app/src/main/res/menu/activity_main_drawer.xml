@@ -21,12 +21,12 @@
         </item>
     </group>
 
-    <item android:title="@string/contact_us">
+    <item android:title="@string/debug">
         <menu>
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/nav_item_contacto"/>
+                android:id="@+id/debug"
+                android:icon="@mipmap/ic_launcher"
+                android:title="@string/debug"/>
         </menu>
     </item>
 

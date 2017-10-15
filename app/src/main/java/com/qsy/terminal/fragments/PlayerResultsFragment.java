@@ -34,10 +34,12 @@ public class PlayerResultsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.player_results, container, false);
 		LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.results_ll);
+		LinearLayout lLayout = (LinearLayout) rootView.findViewById(R.id.results_count_ll);
 
 		List<ActionLog> l = mResults.getExecutionLog();
 		int stepId = 0;
 		int currentStepId;
+		long timeSum = 0;
 		// TODO: print the starting time
 		for (ActionLog log : l) {
 			if (log instanceof ActionLog.PlayerToucheActionLog) {
@@ -47,19 +49,21 @@ public class PlayerResultsFragment extends Fragment {
 				if (currentStepId != stepId) {
 					stepId = currentStepId;
 					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-					tv.setText("Paso " + stepId + " - Gano jugador " + color);
+					tv.setText("  Paso " + stepId + " - Gano jugador " + color);
 					linearLayout.addView(tv);
 				}
 				TextView timeTv = (TextView) linearLayout.inflate(getContext(), R.layout.touche_log, null);
-				double seconds = ((ActionLog.PlayerToucheActionLog) log).getDelay()/1000.0;
-				timeTv.setText(color+": "+seconds);
+				timeSum += ((ActionLog.PlayerToucheActionLog) log).getDelay();
+				double seconds = ((ActionLog.PlayerToucheActionLog) log).getDelay() / 1000.0;
+				timeTv.setText("      " + color + ": " + seconds + " segundos");
 				linearLayout.addView(timeTv);
 			} else if (log instanceof ActionLog.StepTimeOutActionLog) {
 				stepId = ((ActionLog.StepTimeOutActionLog) log).getStepId();
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-				tv.setText("Paso "+stepId+" incompleto.");
+				tv.setText("  Paso " + stepId + " incompleto.");
 				linearLayout.addView(tv);
-				if(mResults.isStopOnTimeout()) {
+				timeSum += mResults.getStepTimeout();
+				if (mResults.isStopOnTimeout()) {
 					TextView ntv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 					ntv.setText("Rutina terminada por paso incompleto.");
 					linearLayout.addView(ntv);
@@ -73,6 +77,20 @@ public class PlayerResultsFragment extends Fragment {
 			}
 		}
 
+		TextView steps = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
+		steps.setText("  Nodos: " + mResults.getNumberOfNodes());
+		lLayout.addView(steps);
+		TextView nodes = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
+		nodes.setText("  Pasos: " + mResults.getTotalSteps());
+		lLayout.addView(nodes);
+		double average = (timeSum / mResults.getTotalSteps()) / 1000.0;
+		TextView avr = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
+		avr.setText("  Tiempo promedio: " + average + " segundos");
+		lLayout.addView(avr);
+		double total = timeSum / 1000.0;
+		TextView duration = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
+		duration.setText("  Tiempo total: " + total + " segundos");
+		lLayout.addView(duration);
 		Button bt = (Button) linearLayout.inflate(getContext(), R.layout.done_button, null);
 		bt.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -81,6 +99,7 @@ public class PlayerResultsFragment extends Fragment {
 			}
 		});
 		linearLayout.addView(bt);
+
 		return rootView;
 	}
 

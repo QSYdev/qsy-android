@@ -1,5 +1,6 @@
 package com.qsy.terminal.fragments.libterminal;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
 public class LibterminalFragment extends Fragment {
+
+	private OnFragmentInteractionListener mListener;
 
 	private SwitchCompat mLibterminalStartStopSW;
 	private TerminalAPI mTerminalAPI;
@@ -76,6 +79,7 @@ public class LibterminalFragment extends Fragment {
 							buttonView.setChecked(false);
 							return;
 						}
+						mListener.terminalOff();
 						mTerminalAPI.stop();
 						Toast.makeText(getContext().getApplicationContext(),
 							"Terminal apagada",
@@ -86,6 +90,27 @@ public class LibterminalFragment extends Fragment {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (context instanceof OnFragmentInteractionListener) {
+			mListener = (OnFragmentInteractionListener) context;
+		} else {
+			throw new RuntimeException(context.toString()
+				+ " must implement OnFragmentInteractionListener");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mListener = null;
+	}
+
+	public interface OnFragmentInteractionListener {
+		void terminalOff();
 	}
 
 }

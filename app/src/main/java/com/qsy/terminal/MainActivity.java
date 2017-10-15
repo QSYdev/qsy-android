@@ -16,11 +16,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.qsy.terminal.fragments.DebugFragment;
 import com.qsy.terminal.fragments.executors.CustomExecutorFragment;
 import com.qsy.terminal.fragments.libterminal.LibterminalFragment;
 import com.qsy.terminal.fragments.executors.PlayerExecutorFragment;
 import com.qsy.terminal.services.LibterminalService;
 import com.qsy.terminal.utils.QSYUtils;
+
+import java.util.ArrayList;
 
 import libterminal.lib.node.Node;
 import libterminal.patterns.observer.Event;
@@ -28,7 +31,7 @@ import libterminal.patterns.observer.EventListener;
 import libterminal.patterns.visitor.EventHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-	EventListener {
+	EventListener, DebugFragment.OnFragmentInteractionListener, LibterminalFragment.OnFragmentInteractionListener {
 	private ActionBarDrawerToggle mToggle;
 	private DrawerLayout mDrawer;
 	private Toolbar mToolbar;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 	private MainActivityConnection mConnection = new MainActivityConnection();
 	private LibterminalService libterminalService;
 	private LibterminalFragment mLibterminalFragment;
+
+	private ArrayList<Node> mNodes = new ArrayList<Node>();
 
 	private final EventHandler eventHandler = new InternalEventHandler();
 
@@ -166,6 +171,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 				fm.beginTransaction().replace(R.id.content_main,
 					playerExecutorFragment).addToBackStack("PlayerExecutorFragment").commit();
 				break;
+			case R.id.debug:
+				if (libterminalService == null) {
+					Toast.makeText(MainActivity.this,
+						"No esta la terminal enlazada",
+						Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if (!libterminalService.getTerminal().isUp()) {
+					Toast.makeText(getApplicationContext(),
+						getString(R.string.libterminal_not_up),
+						Toast.LENGTH_LONG).show();
+					break;
+				}
+				DebugFragment df = DebugFragment.newInstance(libterminalService.getTerminal());
+				fm.beginTransaction().replace(R.id.content_main,
+					df).addToBackStack("DebugFragment").commit();
+				break;
 		}
 
 		mDrawer.closeDrawer(GravityCompat.START);
@@ -177,6 +199,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		event.acceptHandler(eventHandler);
 	}
 
+	@Override
+	public void terminalOff() {
+		mNodes = new ArrayList<Node>();
+	}
+
 	private final class InternalEventHandler extends EventHandler {
 
 		@Override
@@ -186,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					mNodes.add(newNode);
 					Toast.makeText(
 						getApplicationContext(),
 						getString(R.string.newNode, newNode.getNodeId()),
@@ -202,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					mNodes.remove(disconnectedNode);
 					Toast.makeText(
 						getApplicationContext(),
 						getString(R.string.disconnectedNode, disconnectedNode.getNodeId()),
@@ -213,6 +242,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 		}
 	}
 
+	public ArrayList<Node> getNodes() {
+		return mNodes;
+	}
 
 	private final class MainActivityConnection implements ServiceConnection {
 

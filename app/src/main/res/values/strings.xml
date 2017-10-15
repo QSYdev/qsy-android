@@ -76,6 +76,10 @@
     <string name="failed_open_file">No se pudo obtener las rutinas.</string>
     <string name="time_not_configured">No se configuró el tiempo.</string>
     <string name="results">Resultados</string>
+    <string name="debug">Debug</string>
+    <string name="routine_log">Log de la rutina</string>
+    <string name="turn_on">Prender</string>
+    <string name="turn_off">Apagar</string>
 
     <plurals name="amount_of_steps">
         <item quantity="one">Un paso</item>
