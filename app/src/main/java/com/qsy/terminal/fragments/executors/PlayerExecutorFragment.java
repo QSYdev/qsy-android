@@ -364,7 +364,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				if (mPlayerCyanOn)
 					playersAndColors.add(Color.CYAN);
 				if (mPlayerMagentaOn)
-					playersAndColors.add(Color.VIOLET);
+					playersAndColors.add(Color.MAGENTA);
 
 				if (mTerminal.connectedNodesAmount() < 1) {
 					Toast.makeText(getContext().getApplicationContext(),
@@ -418,11 +418,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 	@Override
 	public void receiveEvent(final Event event) {
-		Log.d("PEF", "before getactivity");
 		if (getActivity() == null) return;
-		Log.d("PEF", "after getactivity");
 		event.acceptHandler(eventHandler);
-		Log.d("PEF", "after getactivity");
 	}
 
 	private final class InternalEventHandler extends EventHandler {
@@ -433,7 +430,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					Log.d("PEF", "inside the newNodeEvent handler");
 					setAmountOfNodesSpinner();
 				}
 			});
@@ -445,7 +441,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					Log.d("PEF", "inside the disconnectedNodeEvent handler");
 					setAmountOfNodesSpinner();
 				}
 			});

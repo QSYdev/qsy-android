@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 import libterminal.api.TerminalAPI;
 import libterminal.lib.routine.Routine;
@@ -41,7 +44,7 @@ public class CustomExecutorFragment extends Fragment {
 	private SwitchCompat mTouchSC;
 
 	private Routine mRoutine = null;
-	private String[] names;
+	private TreeMap<String, Routine> mRoutines;
 
 	public static CustomExecutorFragment newInstance(TerminalAPI api) {
 		CustomExecutorFragment cef = new CustomExecutorFragment();
@@ -52,6 +55,7 @@ public class CustomExecutorFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		String[] names;
 		try {
 			names = getContext().getApplicationContext().getAssets().list("routines");
 		} catch (IOException e) {
@@ -60,10 +64,11 @@ public class CustomExecutorFragment extends Fragment {
 				Toast.LENGTH_SHORT).show();
 			return;
 		}
-		for (int i = 0; i < names.length; i++) {
-			File f = new File(getContext().getApplicationContext().getCacheDir() + "/" + names[i]);
+		mRoutines = new TreeMap<String, Routine>();
+		for (String name : names) {
+			File f = new File(getContext().getApplicationContext().getCacheDir() + "/" + name);
 			if (!f.exists()) try {
-				InputStream is = getContext().getApplicationContext().getAssets().open("routines/"+names[i]);
+				InputStream is = getContext().getApplicationContext().getAssets().open("routines/" + name);
 				int size = is.available();
 				byte[] buffer = new byte[size];
 				is.read(buffer);
@@ -73,6 +78,15 @@ public class CustomExecutorFragment extends Fragment {
 				fos.close();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
+			}
+			Routine routine = null;
+			try {
+				Log.d("NAME", name);
+				Log.d("NAME", f.getPath());
+				routine = RoutineManager.loadRoutine(f.getPath());
+				mRoutines.put(routine.getName(), routine);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -86,8 +100,8 @@ public class CustomExecutorFragment extends Fragment {
 		mNumberOfStepsTV = (TextView) rootView.findViewById(R.id.custom_number_of_steps);
 		mTotalTimeOutTV = (TextView) rootView.findViewById(R.id.custom_total_time_out);
 
-		mSoundSC = (SwitchCompat)  rootView.findViewById(R.id.custom_sound_sc);
-		mTouchSC = (SwitchCompat)  rootView.findViewById(R.id.custom_touch_node_sc);
+		mSoundSC = (SwitchCompat) rootView.findViewById(R.id.custom_sound_sc);
+		mTouchSC = (SwitchCompat) rootView.findViewById(R.id.custom_touch_node_sc);
 
 		mStartRoutineBT = (Button) rootView.findViewById(R.id.start_custom_routine);
 		setupOnClickListeners();
@@ -102,7 +116,7 @@ public class CustomExecutorFragment extends Fragment {
 		mStartRoutineBT.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(mTerminal.connectedNodesAmount() < (int)mRoutine.getNumberOfNodes()) {
+				if (mTerminal.connectedNodesAmount() < (int) mRoutine.getNumberOfNodes()) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.not_enough_connected_nodes),
 						Toast.LENGTH_SHORT).show();
@@ -117,6 +131,8 @@ public class CustomExecutorFragment extends Fragment {
 	}
 
 	private void setupSpinner() {
+		String[] names = new String[mRoutines.keySet().size()];
+		names = mRoutines.keySet().toArray(names);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(
 			getActivity(),
 			android.R.layout.simple_spinner_item,
@@ -124,12 +140,14 @@ public class CustomExecutorFragment extends Fragment {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mRoutineSP.setAdapter(adapter);
 		if (names.length > 0) {
-			routineData(0);
+			routineData(names[0]);
 		}
 		mRoutineSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				routineData(position);
+				String[] names = new String[mRoutines.keySet().size()];
+				String name = mRoutines.keySet().toArray(names)[position];
+				routineData(name);
 			}
 
 			@Override
@@ -138,23 +156,14 @@ public class CustomExecutorFragment extends Fragment {
 		});
 	}
 
-	private void routineData(int position) {
-		try {
-			mRoutine = RoutineManager.loadRoutine(getContext().getApplicationContext().getCacheDir() + "/" + names[position]);
-		} catch (IOException e) {
-			Toast.makeText(getContext().getApplicationContext(),
-				getString(R.string.failed_open_file),
-				Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-
+	private void routineData(String name) {
+		mRoutine = mRoutines.get(name);
 		mNumberOfNodesTV.setText(getResources().getQuantityString(R.plurals.custom_number_of_nodes, mRoutine.getNumberOfNodes(), mRoutine.getNumberOfNodes()));
 		mNumberOfNodesTV.setVisibility(View.VISIBLE);
 		mNumberOfStepsTV.setText(getResources().getQuantityString(R.plurals.custom_number_of_steps, mRoutine.getSteps().size(), mRoutine.getSteps().size()));
 		mNumberOfStepsTV.setVisibility(View.VISIBLE);
-		int secs = (int)mRoutine.getTotalTimeOut()/1000;
-		if(secs == 0) {
+		int secs = (int) mRoutine.getTotalTimeOut() / 1000;
+		if (secs == 0) {
 			mTotalTimeOutTV.setText(getString(R.string.time_not_configured));
 		} else {
 			mTotalTimeOutTV.setText(getResources().getQuantityString(R.plurals.custom_total_time_out, secs, secs));

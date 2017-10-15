@@ -37,6 +37,6 @@ dependencies {
 
     compile('com.code-troopers.betterpickers:library:3.1.0')
 
-    compile group: 'com.github.QSYteam', name: 'libterminal', version: 'cf576ff', changing: true
+    compile group: 'com.github.QSYteam', name: 'libterminal', version: 'dev-SNAPSHOT', changing: true
     testCompile 'junit:junit:4.12'
 }
