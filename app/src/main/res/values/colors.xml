@@ -8,8 +8,8 @@
 
     <color name="form_fields_text_color">#686b6b</color>
     <color name="player_blue">#0000ff</color>
-    <color name="player_red">#a90707</color>
-    <color name="player_green">#00a700</color>
-    <color name="player_magenta">#ac16ac</color>
-    <color name="player_cyan">#0cd4d4</color>
+    <color name="player_red">#cc3d3d</color>
+    <color name="player_green">#28cc28</color>
+    <color name="player_magenta">#cc28cc</color>
+    <color name="player_cyan">#3dcccc</color>
 </resources>
