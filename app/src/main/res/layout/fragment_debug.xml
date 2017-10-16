@@ -88,6 +88,29 @@
 
     </TableRow>
 
+    <View style="@style/FormDivider"/>
+
+    <RelativeLayout
+        style="@style/FormFieldLayout"
+        android:id="@+id/step_enabled_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/step_enabled_sc"
+            style="@style/FormSwitchCompat"
+            android:text="@string/enable_sensor"/>
+
+        <TextView
+            style="@style/FormFieldDescription"
+            android:id="@+id/step_enabled_tv"
+            android:layout_alignBottom="@+id/step_enabled_sc"
+            android:text="@string/enable_sensor_description"/>
+
+    </RelativeLayout>
+
+    <View style="@style/FormDivider"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

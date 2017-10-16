@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -42,11 +44,13 @@ public class DebugFragment extends Fragment implements EventListener {
 	private Button mButtonBlue;
 	private Button mButtonCyan;
 	private Button mButtonMagenta;
+	private SwitchCompat mStepSC;
 	private boolean mRedV;
 	private boolean mBlueV;
 	private boolean mCyanV;
 	private boolean mMagentaV;
 	private boolean mGreenV;
+	private boolean checked;
 	private List<Color> colors = new LinkedList<Color>();
 
 	public static DebugFragment newInstance(TerminalAPI terminal) {
@@ -68,6 +72,7 @@ public class DebugFragment extends Fragment implements EventListener {
 				 @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_debug, container, false);
 
+		checked = false;
 		mNodesSpinner = (Spinner) rootView.findViewById(R.id.nodes_spinner);
 		setNodesSpinner();
 		mSendButton = (Button) rootView.findViewById(R.id.send_packet);
@@ -82,7 +87,8 @@ public class DebugFragment extends Fragment implements EventListener {
 						Toast.LENGTH_SHORT).show();
 					return;
 				}
-				CommandParameters cmd = new CommandParameters(nodeId, 0L, color, 0);
+				int step = checked ? 1 : 0;
+				CommandParameters cmd = new CommandParameters(nodeId, 0L, color, step);
 				mTerminal.sendPacket(nodeId, cmd, false, false);
 			}
 		});
@@ -111,6 +117,13 @@ public class DebugFragment extends Fragment implements EventListener {
 		mButtonCyan.setText(getString(R.string.switch_off));
 		mButtonMagenta = (Button) rootView.findViewById(R.id.button_magenta);
 		mButtonMagenta.setText(getString(R.string.switch_off));
+		mStepSC = (SwitchCompat) rootView.findViewById(R.id.step_enabled_sc);
+		mStepSC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				checked = isChecked;
+			}
+		});
 		mBlueV = false;
 		mRedV = false;
 		mGreenV = false;
@@ -154,7 +167,7 @@ public class DebugFragment extends Fragment implements EventListener {
 		mButtonCyan.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mBlueV) {
+				if(mCyanV) {
 					mButtonCyan.setText(getString(R.string.switch_off));
 					mCyanV = false;
 				} else {
@@ -223,6 +236,7 @@ public class DebugFragment extends Fragment implements EventListener {
 		int i = 0;
 		for (Node node : mNodes) {
 			ints[i] = node.getNodeId();
+			i++;
 		}
 		return ints;
 	}

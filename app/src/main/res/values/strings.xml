@@ -80,6 +80,8 @@
     <string name="routine_log">Log de la rutina</string>
     <string name="turn_on">Prender</string>
     <string name="turn_off">Apagar</string>
+    <string name="enable_sensor_description">Activa el sensor para poder apagar el paso.</string>
+    <string name="enable_sensor">Habilitar sensor</string>
 
     <plurals name="amount_of_steps">
         <item quantity="one">Un paso</item>

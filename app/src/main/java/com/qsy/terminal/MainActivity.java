@@ -220,8 +220,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					supportInvalidateOptionsMenu();
 					mNodes.add(newNode);
+					supportInvalidateOptionsMenu();
 				}
 			});
 		}
@@ -233,8 +233,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					supportInvalidateOptionsMenu();
 					mNodes.remove(disconnectedNode);
+					supportInvalidateOptionsMenu();
 				}
 			});
 		}
