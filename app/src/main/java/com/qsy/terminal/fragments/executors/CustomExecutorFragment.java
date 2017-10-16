@@ -41,7 +41,7 @@ public class CustomExecutorFragment extends Fragment {
 	private Spinner mRoutineSP;
 	private Button mStartRoutineBT;
 	private SwitchCompat mSoundSC;
-	private SwitchCompat mTouchSC;
+	private boolean mSoundValue;
 
 	private Routine mRoutine = null;
 	private TreeMap<String, Routine> mRoutines;
@@ -101,7 +101,12 @@ public class CustomExecutorFragment extends Fragment {
 		mTotalTimeOutTV = (TextView) rootView.findViewById(R.id.custom_total_time_out);
 
 		mSoundSC = (SwitchCompat) rootView.findViewById(R.id.custom_sound_sc);
-		mTouchSC = (SwitchCompat) rootView.findViewById(R.id.custom_touch_node_sc);
+		mSoundSC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mSoundValue = isChecked;
+			}
+		});
 
 		mStartRoutineBT = (Button) rootView.findViewById(R.id.start_custom_routine);
 		setupOnClickListeners();
@@ -123,7 +128,7 @@ public class CustomExecutorFragment extends Fragment {
 					return;
 				}
 
-				mTerminal.executeCustom(mRoutine, null, mSoundSC.isChecked(), mTouchSC.isChecked());
+				mTerminal.executeCustom(mRoutine, null, mSoundValue, false);
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
 				startActivity(intent);
 			}

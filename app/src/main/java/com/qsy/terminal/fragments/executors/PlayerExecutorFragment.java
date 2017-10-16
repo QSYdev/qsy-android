@@ -61,7 +61,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private SwitchCompat mWaitForAllSwitchCompat;
 	private SwitchCompat mStopOnTimeOutSwitchCompat;
 	private SwitchCompat mSoundSwitchCompat;
-	private SwitchCompat mTouchNodeSwitchCompat;
 	private Button mNodeDelayButton;
 	private Button mStepTimeoutButton;
 	private BigInteger mStepTimeoutValue;
@@ -71,7 +70,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private boolean mWaitForAllValue;
 	private boolean mStopOnTimeoutValue;
 	private boolean mSoundValue;
-	private boolean mTouchNodeValue;
 	private int mAmountOfStepsValue;
 	private TextView mAmountOfStepsTV;
 	private TextView mNodeDelayTextView;
@@ -122,7 +120,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mWaitForAllSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.wait_for_all_sc);
 		mStopOnTimeOutSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.stop_on_timeout_sc);
 		mSoundSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.sound_sc);
-		mTouchNodeSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.touch_node_sc);
 		setupSwitchCompatListeners();
 
 		setAmountOfNodesSpinner();
@@ -190,12 +187,6 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 				mSoundValue = b;
-			}
-		});
-		mTouchNodeSwitchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-				mTouchNodeValue = b;
 			}
 		});
 	}
@@ -434,7 +425,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 					mTerminal.executePlayer(null, mSelectedNode, playersAndColors,
 						mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
 						mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
-						mSoundValue, mTouchNodeValue);
+						mSoundValue, false);
 				} catch (IllegalStateException e) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.routine_currently_executing),

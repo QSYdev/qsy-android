@@ -210,27 +210,6 @@
 
         <View style="@style/FormDivider"/>
 
-        <RelativeLayout
-            style="@style/FormFieldLayout"
-            android:id="@+id/touch_node_rl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/touch_node_sc"
-            style="@style/FormSwitchCompat"
-            android:text="@string/touch_node"/>
-
-            <TextView
-                style="@style/FormFieldDescription"
-                android:id="@+id/touch_node_tv"
-                android:layout_alignBottom="@+id/touch_node_sc"
-                android:text="@string/touch_node_description"/>
-
-        </RelativeLayout>
-
-        <View style="@style/FormDivider"/>
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
