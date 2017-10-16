@@ -52,6 +52,7 @@
     <style name="FormButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:paddingLeft">@dimen/form_field_padding_left</item>
         <item name="android:paddingRight">@dimen/form_field_padding_right</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
     <style name="PlayerColorLayout">

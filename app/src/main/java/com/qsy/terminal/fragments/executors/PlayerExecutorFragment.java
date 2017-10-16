@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.qsy.terminal.R;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
 import libterminal.api.TerminalAPI;
 import libterminal.lib.routine.Color;
@@ -76,8 +78,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private TextView mStepTimeoutTextView;
 	private TextView mRoutineDurationTextView;
 	private int mSelectedNode;
-
 	private TerminalAPI mTerminal;
+	private List<Color> selectedColorsQueue;
 
 	public static PlayerExecutorFragment newInstance(TerminalAPI terminalAPI) {
 		PlayerExecutorFragment pef = new PlayerExecutorFragment();
@@ -91,6 +93,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.player_executor_form, container, false);
 		mAmountOfNodesSpinner = (Spinner) rootView.findViewById(R.id.amount_of_nodes_spinner);
+		selectedColorsQueue = new ArrayList<Color>();
 		setAmountOfNodesSpinnerListener();
 
 		mAmountOfStepsButton = (Button) rootView.findViewById(R.id.amount_of_steps_bt);
@@ -130,6 +133,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mNodeDelayTextView.setText(getString(R.string.delay_in_miliseconds, 500));
 
 		mPlayerCyanButton.setText(getString(R.string.button_on));
+		selectedColorsQueue.add(Color.CYAN);
 		mPlayerCyanOn = true;
 
 		mStepTimeoutValue = new BigInteger(String.valueOf(0));
@@ -141,6 +145,9 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 				mSelectedNode = i + 1;
+				while(selectedColorsQueue.size() > mSelectedNode){
+					removeFirstColorQueue();
+				}
 			}
 
 			@Override
@@ -198,14 +205,44 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		super.onCreate(savedInstanceState);
 	}
 
+	private void addColorQueue(Color color){
+		selectedColorsQueue.add(color);
+		removeFirstColorQueue();
+	}
+
+	private void removeFirstColorQueue(){
+		if(selectedColorsQueue.size() > mSelectedNode){
+			Color aux = selectedColorsQueue.get(0);
+			selectedColorsQueue.remove(0);
+			if(aux.equals(Color.RED)){
+				mPlayerRedButton.setText(getString(R.string.button_off));
+				mPlayerRedOn = false;
+			}else if(aux.equals(Color.GREEN)){
+				mPlayerGreenButton.setText(getString(R.string.button_off));
+				mPlayerGreenOn = false;
+			}else if(aux.equals(Color.BLUE)){
+				mPlayerBlueButton.setText(getString(R.string.button_off));
+				mPlayerBlueOn = false;
+			}else if(aux.equals(Color.CYAN)){
+				mPlayerCyanButton.setText(getString(R.string.button_off));
+				mPlayerCyanOn = false;
+			}else if(aux.equals(Color.MAGENTA)){
+				mPlayerMagentaButton.setText(getString(R.string.button_off));
+				mPlayerMagentaOn = false;
+			}
+		}
+	}
+
 	private void setupOnClickListeners() {
 		mPlayerRedButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerRedOn) {
+					addColorQueue(Color.RED);
 					mPlayerRedButton.setText(getString(R.string.button_on));
 					mPlayerRedOn = true;
 				} else {
+					selectedColorsQueue.remove(Color.RED);
 					mPlayerRedButton.setText(getString(R.string.button_off));
 					mPlayerRedOn = false;
 				}
@@ -215,9 +252,11 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerGreenOn) {
+					addColorQueue(Color.GREEN);
 					mPlayerGreenButton.setText(getString(R.string.button_on));
 					mPlayerGreenOn = true;
 				} else {
+					selectedColorsQueue.remove(Color.GREEN);
 					mPlayerGreenButton.setText(getString(R.string.button_off));
 					mPlayerGreenOn = false;
 				}
@@ -227,9 +266,11 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerBlueOn) {
+					addColorQueue(Color.BLUE);
 					mPlayerBlueButton.setText(getString(R.string.button_on));
 					mPlayerBlueOn = true;
 				} else {
+					selectedColorsQueue.remove(Color.BLUE);
 					mPlayerBlueButton.setText(getString(R.string.button_off));
 					mPlayerBlueOn = false;
 				}
@@ -239,9 +280,11 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerCyanOn) {
+					addColorQueue(Color.CYAN);
 					mPlayerCyanButton.setText(getString(R.string.button_on));
 					mPlayerCyanOn = true;
 				} else {
+					selectedColorsQueue.remove(Color.CYAN);
 					mPlayerCyanButton.setText(getString(R.string.button_off));
 					mPlayerCyanOn = false;
 				}
@@ -251,9 +294,11 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerMagentaOn) {
+					addColorQueue(Color.MAGENTA);
 					mPlayerMagentaButton.setText(getString(R.string.button_on));
 					mPlayerMagentaOn = true;
 				} else {
+					selectedColorsQueue.remove(Color.MAGENTA);
 					mPlayerMagentaButton.setText(getString(R.string.button_off));
 					mPlayerMagentaOn = false;
 				}
