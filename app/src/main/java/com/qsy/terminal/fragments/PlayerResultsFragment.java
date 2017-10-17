@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.qsy.terminal.R;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import libterminal.lib.results.ActionLog;
@@ -23,6 +25,7 @@ public class PlayerResultsFragment extends Fragment {
 
 	private PlayersResults mResults;
 	private OnFragmentInteractionListener mListener;
+	private Map<String, Integer> playersCount;
 
 	public static PlayerResultsFragment newInstance(PlayersResults results) {
 		PlayerResultsFragment prs = new PlayerResultsFragment();
@@ -37,15 +40,18 @@ public class PlayerResultsFragment extends Fragment {
 		LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.results_ll);
 		LinearLayout lLayout = (LinearLayout) rootView.findViewById(R.id.results_count_ll);
 
+		playersCount = new TreeMap<String, Integer>();
+
 		List<ActionLog> l = mResults.getExecutionLog();
 		int stepId = 0;
 		int currentStepId;
 		long timeSum = 0;
-		// TODO: print the starting time
+
 		for (ActionLog log : l) {
 			if (log instanceof ActionLog.PlayerToucheActionLog) {
 				int pid = ((ActionLog.PlayerToucheActionLog) log).getPlayerId();
 				String color = mResults.getPlayersAndColors().get(pid).toString();
+				incrementCount(color);
 				currentStepId = ((ActionLog.PlayerToucheActionLog) log).getStepId();
 				if (currentStepId != stepId) {
 					stepId = currentStepId;
@@ -74,7 +80,6 @@ public class PlayerResultsFragment extends Fragment {
 				tv.setText("Terminó el tiempo de la rutina.");
 				linearLayout.addView(tv);
 			} else if (log instanceof ActionLog.StopActionLog) {
-				// TODO: print time stuff
 			}
 		}
 
@@ -92,6 +97,11 @@ public class PlayerResultsFragment extends Fragment {
 		TextView duration = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
 		duration.setText("  Tiempo total: " + total + " segundos");
 		lLayout.addView(duration);
+		for(Map.Entry<String, Integer> entry : playersCount.entrySet()) {
+			TextView tv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
+			tv.setText("  "+entry.getKey()+ ": "+entry.getValue());
+			lLayout.addView(tv);
+		}
 		Button bt = (Button) linearLayout.inflate(getContext(), R.layout.done_button, null);
 		bt.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -102,6 +112,16 @@ public class PlayerResultsFragment extends Fragment {
 		linearLayout.addView(bt);
 
 		return rootView;
+	}
+
+	private void incrementCount(String color) {
+		Integer count = playersCount.get(color);
+		if (count == null) {
+			playersCount.put(color, 1);
+		} else {
+			playersCount.remove(color);
+			playersCount.put(color, ++count);
+		}
 	}
 
 	@Override
