@@ -1,0 +1,192 @@
+{
+  "playerCount": 1,
+  "numberOfNodes": 3,
+  "totalTimeOut": 0,
+  "steps": [
+    {
+      "expression": "1",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 0
+          }
+        }
+      ]
+    },
+    {
+      "expression": "3",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 3,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1\u00262\u00263",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        },
+        {
+          "id": 2,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 0
+          }
+        },
+        {
+          "id": 3,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "1|2|3",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        },
+        {
+          "id": 2,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 0
+          }
+        },
+        {
+          "id": 3,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "(1\u00262)|3",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        },
+        {
+          "id": 2,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 0
+          }
+        },
+        {
+          "id": 3,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "(1|2)\u00263",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 500,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        },
+        {
+          "id": 2,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 0
+          }
+        },
+        {
+          "id": 3,
+          "delay": 500,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    }
+  ],
+  "name": "Rutina de funcionalidades"
+}
