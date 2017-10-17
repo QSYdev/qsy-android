@@ -23,7 +23,7 @@
             android:weightSum="5">
 
             <Button
-                style="@style/FormButton"
+                style="@style/PlayerFormButton"
                 android:id="@+id/player_button_red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:text="@string/button_off"/>
 
             <Button
-                style="@style/FormButton"
+                style="@style/PlayerFormButton"
                 android:id="@+id/player_button_green"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:text="@string/button_off"/>
 
             <Button
-                style="@style/FormButton"
+                style="@style/PlayerFormButton"
                 android:id="@+id/player_button_blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 android:text="@string/button_off"/>
 
             <Button
-                style="@style/FormButton"
+                style="@style/PlayerFormButton"
                 android:id="@+id/player_button_cyan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 android:text="@string/button_off"/>
 
             <Button
-                style="@style/FormButton"
+                style="@style/PlayerFormButton"
                 android:id="@+id/player_button_magenta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,37 +107,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="2"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/amount_of_steps_bt"
                 style="@style/FormButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0px"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/amount_of_steps"/>
 
             <TextView
                 style="@style/FormFields"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="0px"
                 android:id="@+id/amount_of_steps_tv"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:weightSum="2"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/routine_duration_bt"
                 style="@style/FormButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0px"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/routine_duration"/>
 
             <TextView
                 style="@style/FormFields"
-                android:layout_width="wrap_content"
+                android:layout_width="0px"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/routine_duration_tv"/>
         </LinearLayout>
@@ -198,6 +204,7 @@
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/sound_sc"
             style="@style/FormSwitchCompat"
+            android:enabled="false"
             android:text="@string/routine_sound"/>
 
             <TextView
@@ -213,18 +220,21 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:weightSum="2"
             android:orientation="horizontal">
 
             <Button
                 style="@style/FormButton"
                 android:id="@+id/node_delay_bt"
-                android:layout_width="wrap_content"
+                android:layout_width="0px"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/node_delay"/>
 
             <TextView
                 style="@style/FormFields"
-                android:layout_width="wrap_content"
+                android:layout_width="0px"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/node_delay_tv" />
 
@@ -234,18 +244,21 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:weightSum="2"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/step_timeout_bt"
                 style="@style/FormButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0px"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/step_timeout"/>
 
             <TextView
                 style="@style/FormFields"
-                android:layout_width="wrap_content"
+                android:layout_width="0px"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/step_timeout_tv" />
 

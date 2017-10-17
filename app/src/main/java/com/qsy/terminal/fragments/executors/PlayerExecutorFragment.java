@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,11 +128,9 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 		mNodeDelayValue = new BigInteger(String.valueOf(500));
 		mNodeDelayTextView.setText(getString(R.string.delay_in_miliseconds, 500));
 
-		mPlayerCyanButton.setText(getString(R.string.button_on));
-		selectedColorsQueue.add(Color.CYAN);
-		mPlayerCyanOn = true;
-
 		mStepTimeoutValue = new BigInteger(String.valueOf(0));
+
+		mSoundValue = false;
 		return rootView;
 	}
 

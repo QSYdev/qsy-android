@@ -37,6 +37,7 @@
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/custom_sound_sc"
                 style="@style/FormSwitchCompat"
+                android:enabled="false"
                 android:text="@string/routine_sound"/>
 
             <TextView

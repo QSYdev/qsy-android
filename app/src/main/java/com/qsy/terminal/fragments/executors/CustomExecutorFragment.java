@@ -114,6 +114,8 @@ public class CustomExecutorFragment extends Fragment {
 		mRoutineSP = (Spinner) rootView.findViewById(R.id.custom_routine_spinner);
 		setupSpinner();
 
+		mSoundValue = false;
+
 		return rootView;
 	}
 
