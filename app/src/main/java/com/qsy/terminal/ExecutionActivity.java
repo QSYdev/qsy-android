@@ -77,6 +77,7 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 				mExecFragment.stopChronometer();
 			}
 		});
+		this.finish();
 	}
 
 	private void resultsDone() {

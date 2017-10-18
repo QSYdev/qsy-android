@@ -79,6 +79,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 	private List<Color> selectedColorsQueue;
 
 	public static PlayerExecutorFragment newInstance(TerminalAPI terminalAPI) {
+        if (terminalAPI == null)
+			throw new IllegalArgumentException("<< PlayerExecutorFragment >> terminalAPI es nula!");
 		PlayerExecutorFragment pef = new PlayerExecutorFragment();
 		pef.mTerminal = terminalAPI;
 		terminalAPI.addListener(pef);
