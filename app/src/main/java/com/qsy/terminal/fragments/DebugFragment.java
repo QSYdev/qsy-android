@@ -79,9 +79,23 @@ public class DebugFragment extends Fragment implements EventListener {
 		mSendButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Color color = colors.get(colors.size()-1);
+				Color color;
+				try {
+					color = colors.get(colors.size() - 1);
+				} catch (IndexOutOfBoundsException e) {
+					Toast.makeText(getContext().getApplicationContext(),
+						"Se debe elegír un nodo",
+						Toast.LENGTH_SHORT).show();
+					return;
+				}
+				if (!checkedBt(color)) {
+					Toast.makeText(getContext().getApplicationContext(),
+						"Se debe elegír un nodo",
+						Toast.LENGTH_SHORT).show();
+					return;
+				}
 				Integer nodeId = (Integer) mNodesSpinner.getSelectedItem();
-				if(nodeId == null) {
+				if (nodeId == null) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.not_enough_connected_nodes),
 						Toast.LENGTH_SHORT).show();
@@ -97,7 +111,7 @@ public class DebugFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View v) {
 				Integer nodeId = (Integer) mNodesSpinner.getSelectedItem();
-				if(nodeId == null) {
+				if (nodeId == null) {
 					Toast.makeText(getContext().getApplicationContext(),
 						getString(R.string.not_enough_connected_nodes),
 						Toast.LENGTH_SHORT).show();
@@ -134,12 +148,27 @@ public class DebugFragment extends Fragment implements EventListener {
 		return rootView;
 	}
 
+	private boolean checkedBt(Color color) {
+		if (color == Color.BLUE) {
+			return mBlueV;
+		} else if (color == Color.RED) {
+			return mRedV;
+		} else if (color == Color.GREEN) {
+			return mGreenV;
+		} else if (color == Color.CYAN) {
+			return mCyanV;
+		} else if (color == Color.MAGENTA) {
+			return mMagentaV;
+		}
+
+		return false;
+	}
 
 	private void setupOnClickListeners() {
 		mButtonBlue.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mBlueV) {
+				if (mBlueV) {
 					mButtonBlue.setText(getString(R.string.switch_off));
 					mBlueV = false;
 				} else {
@@ -153,7 +182,7 @@ public class DebugFragment extends Fragment implements EventListener {
 		mButtonRed.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mRedV) {
+				if (mRedV) {
 					mButtonRed.setText(getString(R.string.switch_off));
 					mRedV = false;
 				} else {
@@ -167,7 +196,7 @@ public class DebugFragment extends Fragment implements EventListener {
 		mButtonCyan.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mCyanV) {
+				if (mCyanV) {
 					mButtonCyan.setText(getString(R.string.switch_off));
 					mCyanV = false;
 				} else {
@@ -181,7 +210,7 @@ public class DebugFragment extends Fragment implements EventListener {
 		mButtonMagenta.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mMagentaV) {
+				if (mMagentaV) {
 					mButtonMagenta.setText(getString(R.string.switch_off));
 					mMagentaV = false;
 				} else {
@@ -195,7 +224,7 @@ public class DebugFragment extends Fragment implements EventListener {
 		mButtonGreen.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mGreenV) {
+				if (mGreenV) {
 					mButtonGreen.setText(getString(R.string.switch_off));
 					mGreenV = false;
 				} else {
@@ -209,7 +238,11 @@ public class DebugFragment extends Fragment implements EventListener {
 	}
 
 	private void turnOffAll() {
-		mGreenV = false;mRedV = false;mBlueV = false;mCyanV = false;mMagentaV = false;
+		mGreenV = false;
+		mRedV = false;
+		mBlueV = false;
+		mCyanV = false;
+		mMagentaV = false;
 		mButtonBlue.setText(getString(R.string.switch_off));
 		mButtonRed.setText(getString(R.string.switch_off));
 		mButtonCyan.setText(getString(R.string.switch_off));
