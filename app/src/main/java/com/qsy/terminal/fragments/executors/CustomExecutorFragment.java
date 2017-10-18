@@ -130,6 +130,7 @@ public class CustomExecutorFragment extends Fragment {
 					return;
 				}
 
+				mTerminal.stopNodesSearch();
 				mTerminal.executeCustom(mRoutine, null, mSoundValue, false);
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
 				startActivity(intent);

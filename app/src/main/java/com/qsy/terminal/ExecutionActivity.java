@@ -70,7 +70,12 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 
 	@Override
 	public void routineCanceled() {
-		libterminalService.getTerminal().stopExecution();
+		try {
+			libterminalService.getTerminal().stopExecution();
+		} catch(IllegalStateException e) {
+			Log.d("ExecutionActivity", e.getMessage());
+		}
+		libterminalService.getTerminal().startNodesSearch();
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -91,6 +96,18 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 	@Override
 	public void customResultsDone() {
 		resultsDone();
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		try {
+			libterminalService.getTerminal().stopExecution();
+		} catch(IllegalStateException e) {
+			Log.d("ExecutionActivity", e.getMessage());
+		}
+		libterminalService.getTerminal().startNodesSearch();
+		finish();
 	}
 
 	private final class ExecutionActivityConnection implements ServiceConnection {
@@ -136,16 +153,24 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 					}
 				}
 			});
-//			AlertDialog.Builder builder = new AlertDialog.Builder(ExecutionActivity.this);
-//			builder.setTitle(R.string.routine_finished);
-//			builder.setIcon(android.R.drawable.ic_dialog_alert);
-//			builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-//				@Override
-//				public void onClick(DialogInterface dialog, int which) {
-//				}
-//			});
-//			AlertDialog d = builder.create();
-//			d.show();
+		}
+
+		@Override
+		public void handle(final Event.DisconnectedNodeEvent disconnectedNodeEvent) {
+			super.handle(disconnectedNodeEvent);
+
+			try {
+				libterminalService.getTerminal().stopExecution();
+			} catch(IllegalStateException e) {
+				Log.d("ExeuctionActivity", e.getMessage());
+			}
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					mExecFragment.stopChronometer();
+					libterminalService.getTerminal().startNodesSearch();
+				}
+			});
 		}
 	}
 }

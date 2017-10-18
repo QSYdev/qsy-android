@@ -419,6 +419,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				try {
 					// TODO: el primer parametro es la asociacion de nodos. En un futuro
 					// vamos a tener la asociacion a nivel aplicacion
+					mTerminal.stopNodesSearch();
 					mTerminal.executePlayer(null, mSelectedNode, playersAndColors,
 						mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
 						mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,
