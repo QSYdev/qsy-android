@@ -43,7 +43,7 @@ public class CustomResultsFragment extends Fragment {
 		LinearLayout lLayout = (LinearLayout) rootView.findViewById(R.id.custom_results_count_ll);
 
 		int stepId = 1;
-		int currentStepId;
+		int currentStepId = 0;
 		long stepCount = 0;
 		double max = -1;
 		double min = Double.MAX_VALUE;
@@ -54,20 +54,21 @@ public class CustomResultsFragment extends Fragment {
 			if (log instanceof ActionLog.CustomToucheActionLog) {
 				currentStepId = ((ActionLog.CustomToucheActionLog) log).getStepId();
 				if (currentStepId == stepId) {
+					Log.d("RESULTS", " current = " + currentStepId + " - step: " + stepId);
 					stepCount += ((ActionLog.CustomToucheActionLog) log).getDelay();
 				} else {
-					stepId = currentStepId;
 					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-					double finalCount = Math.floor((stepCount / 1000.0)*100)/100;
+					double finalCount = Math.floor((stepCount / 1000.0) * 100) / 100;
 					totalTime += finalCount;
 					tv.setText("  Paso " + stepId + " - Completado en " + finalCount + " segundos.");
 					linearLayout.addView(tv);
 					if (finalCount > max) {
 						max = finalCount;
 					}
-					if(finalCount < min) {
+					if (finalCount < min) {
 						min = finalCount;
 					}
+					stepId = currentStepId;
 					stepCount = ((ActionLog.CustomToucheActionLog) log).getDelay();
 				}
 			} else if (log instanceof ActionLog.StepTimeOutActionLog) {
@@ -78,6 +79,19 @@ public class CustomResultsFragment extends Fragment {
 				stepCount = 0;
 			} else if (log instanceof ActionLog.RoutineTimeOutActionLog) {
 			} else if (log instanceof ActionLog.StopActionLog) {
+				if(l.get(l.size()-2) instanceof ActionLog.CustomToucheActionLog) {
+					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
+					double finalCount = Math.floor((stepCount / 1000.0) * 100) / 100;
+					totalTime += finalCount;
+					tv.setText("  Paso " + currentStepId + " - Completado en " + finalCount + " segundos.");
+					linearLayout.addView(tv);
+					if (finalCount > max) {
+						max = finalCount;
+					}
+					if (finalCount < min) {
+						min = finalCount;
+					}
+				}
 			}
 		}
 
@@ -87,7 +101,7 @@ public class CustomResultsFragment extends Fragment {
 
 		double avr = totalTime / mResults.getRoutine().getSteps().size();
 		TextView tarv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		tarv.setText("  Tiempo promedio: "+ (Math.floor(avr * 100) / 100) + " segundos");
+		tarv.setText("  Tiempo promedio: " + (Math.floor(avr * 100) / 100) + " segundos");
 		lLayout.addView(tarv);
 
 		TextView tmax = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
