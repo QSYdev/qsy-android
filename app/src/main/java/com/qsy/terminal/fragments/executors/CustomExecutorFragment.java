@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import libterminal.api.TerminalAPI;
@@ -81,8 +79,6 @@ public class CustomExecutorFragment extends Fragment {
 			}
 			Routine routine = null;
 			try {
-				Log.d("NAME", name);
-				Log.d("NAME", f.getPath());
 				routine = RoutineManager.loadRoutine(f.getPath());
 				mRoutines.put(routine.getName(), routine);
 			} catch (IOException e) {

@@ -163,13 +163,13 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 			try {
 				libterminalService.getTerminal().stopExecution();
 			} catch(IllegalStateException e) {
-				Log.d("ExeuctionActivity", e.getMessage());
+				Log.d("ExecutionActivity", e.getMessage());
 			}
+			libterminalService.getTerminal().startNodesSearch();
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					mExecFragment.stopChronometer();
-					libterminalService.getTerminal().startNodesSearch();
 				}
 			});
 		}

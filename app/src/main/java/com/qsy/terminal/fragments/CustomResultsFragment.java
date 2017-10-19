@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class CustomResultsFragment extends Fragment {
 				} else {
 					stepId = currentStepId;
 					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-					double finalCount = stepCount / 1000.0;
+					double finalCount = Math.floor((stepCount / 1000.0)*100)/100;
 					totalTime += finalCount;
 					tv.setText("  Paso " + stepId + " - Completado en " + finalCount + " segundos.");
 					linearLayout.addView(tv);
@@ -81,20 +82,20 @@ public class CustomResultsFragment extends Fragment {
 		}
 
 		TextView ttime = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		ttime.setText("  Tiempo total: " + totalTime + " segundos");
+		ttime.setText("  Tiempo total: " + (Math.floor(totalTime * 100) / 100) + " segundos");
 		lLayout.addView(ttime);
 
 		double avr = totalTime / mResults.getRoutine().getSteps().size();
 		TextView tarv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		tarv.setText("  Tiempo promedio: "+ avr + " segundos");
+		tarv.setText("  Tiempo promedio: "+ (Math.floor(avr * 100) / 100) + " segundos");
 		lLayout.addView(tarv);
 
 		TextView tmax = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		tmax.setText("  Paso más rápido: " + min + " segundos");
+		tmax.setText("  Paso más rápido: " + (Math.floor(min * 100) / 100) + " segundos");
 		lLayout.addView(tmax);
 
 		TextView tmin = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		tmin.setText("  Paso más lento: " + max + " segundos");
+		tmin.setText("  Paso más lento: " + (Math.floor(max * 100) / 100) + " segundos");
 		lLayout.addView(tmin);
 
 		Button bt = (Button) linearLayout.inflate(getContext(), R.layout.done_button, null);

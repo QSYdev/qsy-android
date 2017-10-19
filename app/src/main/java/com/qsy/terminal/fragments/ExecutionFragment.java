@@ -62,8 +62,10 @@ public class ExecutionFragment extends Fragment {
 
 	// This function should only be called on the ui thread
 	public void stopChronometer() {
-		mChronometer.stop();
-		mStatus.setText(getString(R.string.status_finished));
+		if(getActivity() != null && isAdded()) {
+			mChronometer.stop();
+			mStatus.setText(getString(R.string.status_finished));
+		}
 	}
 
 	public interface OnFragmentInteractionListener {
