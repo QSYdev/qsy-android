@@ -46,6 +46,7 @@ public class PlayerResultsFragment extends Fragment {
 		int stepId = 0;
 		int currentStepId;
 		long timeSum = 0;
+		int totalSteps = 0;
 
 		for (ActionLog log : l) {
 			if (log instanceof ActionLog.PlayerToucheActionLog) {
@@ -54,6 +55,7 @@ public class PlayerResultsFragment extends Fragment {
 				incrementCount(color);
 				currentStepId = ((ActionLog.PlayerToucheActionLog) log).getStepId();
 				if (currentStepId != stepId) {
+					totalSteps++;
 					stepId = currentStepId;
 					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 					tv.setText("  Paso " + stepId + " - Gano jugador " + color);
@@ -65,6 +67,7 @@ public class PlayerResultsFragment extends Fragment {
 				timeTv.setText("      " + color + ": " + seconds + " segundos");
 				linearLayout.addView(timeTv);
 			} else if (log instanceof ActionLog.StepTimeOutActionLog) {
+				totalSteps++;
 				stepId = ((ActionLog.StepTimeOutActionLog) log).getStepId();
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 				tv.setText("  Paso " + stepId + " incompleto.");
@@ -87,9 +90,9 @@ public class PlayerResultsFragment extends Fragment {
 		steps.setText("  Nodos: " + mResults.getNumberOfNodes());
 		lLayout.addView(steps);
 		TextView nodes = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		nodes.setText("  Pasos: " + mResults.getTotalSteps());
+		nodes.setText("  Pasos: " + totalSteps);
 		lLayout.addView(nodes);
-		double average = (timeSum / mResults.getTotalSteps()) / 1000.0;
+		double average = (timeSum / totalSteps) / 1000.0;
 		TextView avr = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
 		avr.setText("  Tiempo promedio: " + average + " segundos");
 		lLayout.addView(avr);
@@ -97,9 +100,9 @@ public class PlayerResultsFragment extends Fragment {
 		TextView duration = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
 		duration.setText("  Tiempo total: " + total + " segundos");
 		lLayout.addView(duration);
-		for(Map.Entry<String, Integer> entry : playersCount.entrySet()) {
+		for (Map.Entry<String, Integer> entry : playersCount.entrySet()) {
 			TextView tv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-			tv.setText("  "+entry.getKey()+ ": "+entry.getValue());
+			tv.setText("  " + entry.getKey() + ": " + entry.getValue());
 			lLayout.addView(tv);
 		}
 		Button bt = (Button) linearLayout.inflate(getContext(), R.layout.done_button, null);
