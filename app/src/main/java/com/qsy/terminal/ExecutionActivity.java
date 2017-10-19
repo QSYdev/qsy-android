@@ -85,6 +85,7 @@ public class ExecutionActivity extends AppCompatActivity implements EventListene
 	}
 
 	private void resultsDone() {
+		libterminalService.getTerminal().startNodesSearch();
 		ExecutionActivity.this.finish();
 	}
 
