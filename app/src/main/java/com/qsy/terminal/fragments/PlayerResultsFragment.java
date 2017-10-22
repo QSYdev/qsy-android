@@ -20,12 +20,15 @@ import java.util.TreeMap;
 
 import libterminal.lib.results.ActionLog;
 import libterminal.lib.results.PlayersResults;
+import libterminal.lib.routine.Color;
 
 public class PlayerResultsFragment extends Fragment {
 
 	private PlayersResults mResults;
 	private OnFragmentInteractionListener mListener;
 	private Map<String, Integer> playersCount;
+	private Map<String, Long> playersTime;
+	private Map<String, Integer> playersTimeouts;
 
 	public static PlayerResultsFragment newInstance(PlayersResults results) {
 		PlayerResultsFragment prs = new PlayerResultsFragment();
@@ -41,38 +44,72 @@ public class PlayerResultsFragment extends Fragment {
 		LinearLayout lLayout = (LinearLayout) rootView.findViewById(R.id.results_count_ll);
 
 		playersCount = new TreeMap<String, Integer>();
+		playersTime = new TreeMap<String, Long>();
+		playersTimeouts = new TreeMap<String, Integer>();
+
+		for (Color color : mResults.getPlayersAndColors()) {
+			playersCount.put(color.toString(), 0);
+			playersTime.put(color.toString(), 0L);
+			playersTimeouts.put(color.toString(), 0);
+		}
+		ArrayList<String> currentStepColors = new ArrayList<String>();
 
 		List<ActionLog> l = mResults.getExecutionLog();
 		int stepId = 0;
 		int currentStepId;
 		long timeSum = 0;
 		int totalSteps = 0;
+		long max = 0;
 
 		for (ActionLog log : l) {
 			if (log instanceof ActionLog.PlayerToucheActionLog) {
 				int pid = ((ActionLog.PlayerToucheActionLog) log).getPlayerId();
 				String color = mResults.getPlayersAndColors().get(pid).toString();
+				incrementTime(color, ((ActionLog.PlayerToucheActionLog) log).getDelay());
 				incrementCount(color);
 				currentStepId = ((ActionLog.PlayerToucheActionLog) log).getStepId();
 				if (currentStepId != stepId) {
+					timeSum += max;
+					max = 0;
+					currentStepColors = new ArrayList<String>();
 					totalSteps++;
 					stepId = currentStepId;
 					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 					tv.setText("  Paso " + stepId + " - Gano jugador " + color);
 					linearLayout.addView(tv);
 				}
+				currentStepColors.add(color);
 				TextView timeTv = (TextView) linearLayout.inflate(getContext(), R.layout.touche_log, null);
-				timeSum += ((ActionLog.PlayerToucheActionLog) log).getDelay();
+				if(((ActionLog.PlayerToucheActionLog) log).getDelay() > max){
+					max =((ActionLog.PlayerToucheActionLog) log).getDelay();
+				}
 				double seconds = ((ActionLog.PlayerToucheActionLog) log).getDelay() / 1000.0;
 				timeTv.setText("      " + color + ": " + seconds + " segundos");
 				linearLayout.addView(timeTv);
 			} else if (log instanceof ActionLog.StepTimeOutActionLog) {
-				totalSteps++;
+				if(((ActionLog.StepTimeOutActionLog) log).getStepId() != stepId) {
+					currentStepColors = new ArrayList<String>();
+					timeSum += max;
+				}
 				stepId = ((ActionLog.StepTimeOutActionLog) log).getStepId();
+				for (Map.Entry<String, Integer> entry : playersCount.entrySet()) {
+					if (currentStepColors.indexOf(entry.getKey()) == -1) {
+						incrementTimeout(entry.getKey());
+						incrementTime(entry.getKey(), mResults.getStepTimeout());
+					}
+				}
+				if (!mResults.isWaitForAllPlayers()) {
+					totalSteps++;
+				} else {
+					if (currentStepColors.isEmpty()) {
+						totalSteps++;
+					}
+				}
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 				tv.setText("  Paso " + stepId + " incompleto.");
 				linearLayout.addView(tv);
 				timeSum += mResults.getStepTimeout();
+				max = 0;
 				if (mResults.isStopOnTimeout()) {
 					TextView ntv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 					ntv.setText("Rutina terminada por paso incompleto.");
@@ -83,6 +120,7 @@ public class PlayerResultsFragment extends Fragment {
 				tv.setText("Terminó el tiempo de la rutina.");
 				linearLayout.addView(tv);
 			} else if (log instanceof ActionLog.StopActionLog) {
+				timeSum += max;
 			}
 		}
 
@@ -96,20 +134,25 @@ public class PlayerResultsFragment extends Fragment {
 			nodes.setText("  Pasos: " + totalSteps);
 		}
 		lLayout.addView(nodes);
-		if (totalSteps > 0) {
-			double average = (timeSum / totalSteps) / 1000.0;
-			TextView avr = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-			avr.setText("  Tiempo promedio: " + average + " segundos");
-			lLayout.addView(avr);
-		}
 		double total = (timeSum + mResults.getDelay() * totalSteps) / 1000.0;
 		TextView duration = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
 		duration.setText("  Tiempo total: " + total + " segundos");
 		lLayout.addView(duration);
-		for (Map.Entry<String, Integer> entry : playersCount.entrySet()) {
-			TextView tv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-			tv.setText("  " + entry.getKey() + ": " + entry.getValue());
-			lLayout.addView(tv);
+		if (totalSteps != 0) {
+			while (!playersCount.isEmpty()) {
+				int maxaux = -1;
+				String mstring = "";
+				for (Map.Entry<String, Integer> entry : playersCount.entrySet()) {
+					if (entry.getValue() > maxaux) {
+						maxaux = entry.getValue();
+						mstring = entry.getKey();
+					}
+				}
+				TextView tv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
+				tv.setText("  " + mstring + ": " + maxaux + " / " + ((playersTime.get(mstring) / (playersTimeouts.get(mstring) + playersCount.get(mstring))) / 1000.0) + " segundos");
+				lLayout.addView(tv);
+				playersCount.remove(mstring);
+			}
 		}
 		Button bt = (Button) linearLayout.inflate(getContext(), R.layout.done_button, null);
 		bt.setOnClickListener(new View.OnClickListener() {
@@ -123,14 +166,26 @@ public class PlayerResultsFragment extends Fragment {
 		return rootView;
 	}
 
+	private void incrementTime(String color, long delay) {
+		Long v = playersTime.get(color);
+		if (v == null) {
+			playersTime.put(color, delay);
+		} else {
+			playersTime.remove(color);
+			playersTime.put(color, v + delay);
+		}
+	}
+
+	private void incrementTimeout(String color) {
+		Integer count = playersTimeouts.get(color);
+		playersTimeouts.remove(color);
+		playersTimeouts.put(color, ++count);
+	}
+
 	private void incrementCount(String color) {
 		Integer count = playersCount.get(color);
-		if (count == null) {
-			playersCount.put(color, 1);
-		} else {
-			playersCount.remove(color);
-			playersCount.put(color, ++count);
-		}
+		playersCount.remove(color);
+		playersCount.put(color, ++count);
 	}
 
 	@Override
