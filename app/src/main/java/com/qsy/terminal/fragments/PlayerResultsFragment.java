@@ -90,13 +90,19 @@ public class PlayerResultsFragment extends Fragment {
 		steps.setText("  Nodos: " + mResults.getNumberOfNodes());
 		lLayout.addView(steps);
 		TextView nodes = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		nodes.setText("  Pasos: " + totalSteps);
+		if (totalSteps == 0) {
+			nodes.setText("  No hubieron pasos.");
+		} else {
+			nodes.setText("  Pasos: " + totalSteps);
+		}
 		lLayout.addView(nodes);
-		double average = (timeSum / totalSteps) / 1000.0;
-		TextView avr = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		avr.setText("  Tiempo promedio: " + average + " segundos");
-		lLayout.addView(avr);
-		double total = timeSum / 1000.0;
+		if (totalSteps > 0) {
+			double average = (timeSum / totalSteps) / 1000.0;
+			TextView avr = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
+			avr.setText("  Tiempo promedio: " + average + " segundos");
+			lLayout.addView(avr);
+		}
+		double total = (timeSum + mResults.getDelay() * totalSteps) / 1000.0;
 		TextView duration = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
 		duration.setText("  Tiempo total: " + total + " segundos");
 		lLayout.addView(duration);
