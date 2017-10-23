@@ -36,6 +36,7 @@ public class CustomExecutorFragment extends Fragment {
 	private TextView mNumberOfNodesTV;
 	private TextView mNumberOfStepsTV;
 	private TextView mTotalTimeOutTV;
+	private TextView mDescriptionTV;
 	private Spinner mRoutineSP;
 	private Button mStartRoutineBT;
 	private SwitchCompat mSoundSC;
@@ -95,6 +96,7 @@ public class CustomExecutorFragment extends Fragment {
 		mNumberOfNodesTV = (TextView) rootView.findViewById(R.id.custom_number_of_nodes);
 		mNumberOfStepsTV = (TextView) rootView.findViewById(R.id.custom_number_of_steps);
 		mTotalTimeOutTV = (TextView) rootView.findViewById(R.id.custom_total_time_out);
+		mDescriptionTV = (TextView) rootView.findViewById(R.id.custom_description);
 
 		mSoundSC = (SwitchCompat) rootView.findViewById(R.id.custom_sound_sc);
 		mSoundSC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -162,6 +164,8 @@ public class CustomExecutorFragment extends Fragment {
 
 	private void routineData(String name) {
 		mRoutine = mRoutines.get(name);
+		mDescriptionTV.setText(mRoutine.getDescription());
+		mDescriptionTV.setVisibility(View.VISIBLE);
 		mNumberOfNodesTV.setText(getResources().getQuantityString(R.plurals.custom_number_of_nodes, mRoutine.getNumberOfNodes(), mRoutine.getNumberOfNodes()));
 		mNumberOfNodesTV.setVisibility(View.VISIBLE);
 		mNumberOfStepsTV.setText(getResources().getQuantityString(R.plurals.custom_number_of_steps, mRoutine.getSteps().size(), mRoutine.getSteps().size()));

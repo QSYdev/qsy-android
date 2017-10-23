@@ -188,5 +188,6 @@
       ]
     }
   ],
-  "name": "Rutina de funcionalidades"
+  "name": "Rutina de funcionalidades",
+  "description": "Rutina que demuestra las combinaciones que se pueden realizar en los pasos"
 }

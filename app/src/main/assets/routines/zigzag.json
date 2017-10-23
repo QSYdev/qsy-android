@@ -1,6 +1,6 @@
 {
   "playerCount": 1,
-  "numberOfNodes": 2,
+  "numberOfNodes": 5,
   "totalTimeOut": 0,
   "steps": [
     {
@@ -10,11 +10,11 @@
       "nodesConfigurations": [
         {
           "id": 1,
-          "delay": 500,
+          "delay": 0,
           "color": {
-            "red": 0,
+            "red": 15,
             "green": 0,
-            "blue": 15
+            "blue": 0
           }
         }
       ]
@@ -26,73 +26,23 @@
       "nodesConfigurations": [
         {
           "id": 2,
-          "delay": 500,
-          "color": {
-            "red": 15,
-            "green": 0,
-            "blue": 0
-          }
-        }
-      ]
-    },
-    {
-      "expression": "1\u00262",
-      "timeOut": 0,
-      "stopOnTimeout": false,
-      "nodesConfigurations": [
-        {
-          "id": 1,
-          "delay": 500,
+          "delay": 0,
           "color": {
             "red": 0,
-            "green": 0,
-            "blue": 15
-          }
-        },
-        {
-          "id": 2,
-          "delay": 500,
-          "color": {
-            "red": 15,
-            "green": 0,
+            "green": 15,
             "blue": 0
           }
         }
       ]
     },
     {
-      "expression": "1|2",
+      "expression": "3",
       "timeOut": 0,
       "stopOnTimeout": false,
       "nodesConfigurations": [
         {
-          "id": 1,
-          "delay": 500,
-          "color": {
-            "red": 0,
-            "green": 0,
-            "blue": 15
-          }
-        },
-        {
-          "id": 2,
-          "delay": 500,
-          "color": {
-            "red": 15,
-            "green": 0,
-            "blue": 0
-          }
-        }
-      ]
-    },
-    {
-      "expression": "1",
-      "timeOut": 0,
-      "stopOnTimeout": false,
-      "nodesConfigurations": [
-        {
-          "id": 1,
-          "delay": 500,
+          "id": 3,
+          "delay": 0,
           "color": {
             "red": 0,
             "green": 0,
@@ -102,21 +52,38 @@
       ]
     },
     {
-      "expression": "2",
+      "expression": "4",
       "timeOut": 0,
       "stopOnTimeout": false,
       "nodesConfigurations": [
         {
-          "id": 2,
-          "delay": 500,
+          "id": 4,
+          "delay": 0,
+          "color": {
+            "red": 0,
+            "green": 15,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "5",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 5,
+          "delay": 0,
           "color": {
             "red": 15,
             "green": 0,
-            "blue": 0
+            "blue": 15
           }
         }
       ]
     }
   ],
-  "name": "Testing routine"
+  "name": "Zig-Zag",
+  "description": "Rutina para evaluar la velocidad de reacción lateral de los jugadores/as."
 }

@@ -1,5 +1,6 @@
 {
   "name": "Yo-Yo Endurance Test",
+  "description": "Yo-Yo Endurance test de 64 niveles para un unico jugador.",
   "playerCount": 1,
   "numberOfNodes": 2,
   "totalTimeOut": 0,
