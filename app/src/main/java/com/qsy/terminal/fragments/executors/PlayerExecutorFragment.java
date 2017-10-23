@@ -148,7 +148,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> adapterView) {
-
+				mSelectedNode = 0;
 			}
 		});
 	}
@@ -228,6 +228,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerRedOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.RED);
 					mPlayerRedButton.setText(getString(R.string.button_on));
 					mPlayerRedOn = true;
@@ -242,6 +244,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerGreenOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.GREEN);
 					mPlayerGreenButton.setText(getString(R.string.button_on));
 					mPlayerGreenOn = true;
@@ -256,6 +260,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerBlueOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.BLUE);
 					mPlayerBlueButton.setText(getString(R.string.button_on));
 					mPlayerBlueOn = true;
@@ -270,6 +276,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerCyanOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.CYAN);
 					mPlayerCyanButton.setText(getString(R.string.button_on));
 					mPlayerCyanOn = true;
@@ -284,6 +292,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerMagentaOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.MAGENTA);
 					mPlayerMagentaButton.setText(getString(R.string.button_on));
 					mPlayerMagentaOn = true;

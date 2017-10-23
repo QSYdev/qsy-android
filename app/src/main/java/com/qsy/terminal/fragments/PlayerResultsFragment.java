@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class PlayerResultsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.player_results, container, false);
 		LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.results_ll);
 		LinearLayout lLayout = (LinearLayout) rootView.findViewById(R.id.results_count_ll);
+		LinearLayout lWinner = (LinearLayout) rootView.findViewById(R.id.winner);
 
 		playersCount = new TreeMap<String, Integer>();
 		playersTime = new TreeMap<String, Long>();
@@ -76,18 +78,19 @@ public class PlayerResultsFragment extends Fragment {
 					stepId = currentStepId;
 					TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
 					tv.setText("  Paso " + stepId + " - Gano jugador " + color);
+					setTextColor(tv, color);
 					linearLayout.addView(tv);
 				}
 				currentStepColors.add(color);
 				TextView timeTv = (TextView) linearLayout.inflate(getContext(), R.layout.touche_log, null);
-				if(((ActionLog.PlayerToucheActionLog) log).getDelay() > max){
-					max =((ActionLog.PlayerToucheActionLog) log).getDelay();
+				if (((ActionLog.PlayerToucheActionLog) log).getDelay() > max) {
+					max = ((ActionLog.PlayerToucheActionLog) log).getDelay();
 				}
 				double seconds = ((ActionLog.PlayerToucheActionLog) log).getDelay() / 1000.0;
 				timeTv.setText("      " + color + ": " + seconds + " segundos");
 				linearLayout.addView(timeTv);
 			} else if (log instanceof ActionLog.StepTimeOutActionLog) {
-				if(((ActionLog.StepTimeOutActionLog) log).getStepId() != stepId) {
+				if (((ActionLog.StepTimeOutActionLog) log).getStepId() != stepId) {
 					currentStepColors = new ArrayList<String>();
 					timeSum += max;
 				}
@@ -112,23 +115,19 @@ public class PlayerResultsFragment extends Fragment {
 				max = 0;
 				if (mResults.isStopOnTimeout()) {
 					TextView ntv = (TextView) linearLayout.inflate(getContext(), R.layout.step_done, null);
-					ntv.setText("Rutina terminada por paso incompleto.");
+					ntv.setText("  Rutina terminada por paso incompleto.");
 					linearLayout.addView(ntv);
 				}
 			} else if (log instanceof ActionLog.RoutineTimeOutActionLog) {
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.routine_timeout, null);
-				tv.setText("Terminó el tiempo de la rutina.");
+				tv.setText("  Terminó el tiempo de la rutina.");
 				linearLayout.addView(tv);
-				//timeSum = mResults.getTotalTimeOut();
-				timeSum += max;
+				timeSum = mResults.getTotalTimeOut() - mResults.getDelay() * totalSteps;
 			} else if (log instanceof ActionLog.StopActionLog) {
 				timeSum += max;
 			}
 		}
 
-		TextView steps = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-		steps.setText("  Nodos: " + mResults.getNumberOfNodes());
-		lLayout.addView(steps);
 		TextView nodes = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
 		if (totalSteps == 0) {
 			nodes.setText("  No hubieron pasos.");
@@ -140,6 +139,7 @@ public class PlayerResultsFragment extends Fragment {
 		TextView duration = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
 		duration.setText("  Tiempo total: " + total + " segundos");
 		lLayout.addView(duration);
+		boolean w = false;
 		if (totalSteps != 0) {
 			while (!playersCount.isEmpty()) {
 				int maxaux = -1;
@@ -151,11 +151,24 @@ public class PlayerResultsFragment extends Fragment {
 					}
 				}
 				TextView tv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
-				tv.setText("  " + mstring + ": " + maxaux + " / " + ((playersTime.get(mstring) / (playersTimeouts.get(mstring) + playersCount.get(mstring))) / 1000.0) + " segundos");
+				if ((playersTimeouts.get(mstring) + playersCount.get(mstring)) != 0) {
+					tv.setText("  " + mstring + ": " + maxaux + " / " + ((playersTime.get(mstring) / (playersTimeouts.get(mstring) + playersCount.get(mstring))) / 1000.0) + " segundos");
+				} else {
+					tv.setText("  " + mstring + ": " + maxaux + " / -");
+				}
 				lLayout.addView(tv);
+				if (!w) {
+					TextView winner = (TextView) lWinner.inflate(getContext(), R.layout.step_done, null);
+					winner.setText(mstring);
+					winner.setGravity(Gravity.CENTER);
+					setTextColor(winner, mstring);
+					lWinner.addView(winner);
+					w = true;
+				}
 				playersCount.remove(mstring);
 			}
 		}
+
 		Button bt = (Button) linearLayout.inflate(getContext(), R.layout.done_button, null);
 		bt.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -166,6 +179,28 @@ public class PlayerResultsFragment extends Fragment {
 		linearLayout.addView(bt);
 
 		return rootView;
+	}
+
+	private void setTextColor(TextView textView, String color) {
+		switch (color) {
+			case "Azul":
+				textView.setTextColor(getResources().getColor(R.color.player_blue));
+				break;
+			case "Rojo":
+				textView.setTextColor(getResources().getColor(R.color.player_red));
+				break;
+			case "Cyan":
+				textView.setTextColor(getResources().getColor(R.color.player_cyan));
+				break;
+			case "Verde":
+				textView.setTextColor(getResources().getColor(R.color.player_green));
+				break;
+			case "Magenta":
+				textView.setTextColor(getResources().getColor(R.color.player_magenta));
+				break;
+			default:
+				break;
+		}
 	}
 
 	private void incrementTime(String color, long delay) {
