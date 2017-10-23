@@ -119,6 +119,8 @@ public class PlayerResultsFragment extends Fragment {
 				TextView tv = (TextView) linearLayout.inflate(getContext(), R.layout.routine_timeout, null);
 				tv.setText("Terminó el tiempo de la rutina.");
 				linearLayout.addView(tv);
+				//timeSum = mResults.getTotalTimeOut();
+				timeSum += max;
 			} else if (log instanceof ActionLog.StopActionLog) {
 				timeSum += max;
 			}

@@ -38,7 +38,7 @@
     <string name="routines_title">Rutinas</string>
     <string name="contact_us">Contacto</string>
     <string name="start_nodes_search">Buscar tortugas</string>
-    <string name="libterminal_start">Empezar la terminal</string>
+    <string name="libterminal_start">Buscar tortugas</string>
     <string name="routine_currently_executing">Hay una rutina corriendo</string>
     <string name="wrong_player_arguments">Configuración de rutina inválida</string>
     <string name="not_enough_connected_nodes">No hay suficientes nodos conectados</string>
@@ -83,6 +83,10 @@
     <string name="turn_off">Apagar</string>
     <string name="enable_sensor_description">Activa el sensor para poder apagar el paso.</string>
     <string name="enable_sensor">Habilitar sensor</string>
+    <string name="nodes_search">Búsqueda de tortugas</string>
+    <string name="searching_nodes">Conectado</string>
+    <string name="start_search">Empezar</string>
+    <string name="stop_search">Detener</string>
 
     <plurals name="amount_of_steps">
         <item quantity="one">Un paso</item>

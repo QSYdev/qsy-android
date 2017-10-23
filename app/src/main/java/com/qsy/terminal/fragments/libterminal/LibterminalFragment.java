@@ -8,7 +8,9 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qsy.terminal.R;
@@ -26,7 +28,8 @@ public class LibterminalFragment extends Fragment {
 
 	private OnFragmentInteractionListener mListener;
 
-	private SwitchCompat mLibterminalStartStopSW;
+	private TextView mSearchStateTV;
+	private Button mLibterminalStartStopButton;
 	private TerminalAPI mTerminalAPI;
 
 	public static LibterminalFragment newInstance(TerminalAPI terminal) {
@@ -43,48 +46,55 @@ public class LibterminalFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.libterminal_connection, container, false);
-		mLibterminalStartStopSW = (SwitchCompat) rootView.findViewById(R.id.libterminal_start_sw);
+		mLibterminalStartStopButton = (Button) rootView.findViewById(R.id.libterminal_start_bt);
+		setupOnClickListener();
+		mSearchStateTV = (TextView) rootView.findViewById(R.id.libterminal_search_tv);
 		if (mTerminalAPI != null) {
-			mLibterminalStartStopSW.setChecked(mTerminalAPI.isUp());
+			if(!mTerminalAPI.isUp()) {
+				mSearchStateTV.setText(getString(R.string.nodes_search));
+				mLibterminalStartStopButton.setBackgroundColor(getResources().getColor(R.color.player_green));
+				mLibterminalStartStopButton.setText(getString(R.string.start_search));
+			} else {
+				mSearchStateTV.setText(getString(R.string.searching_nodes));
+				mLibterminalStartStopButton.setBackgroundColor(getResources().getColor(R.color.player_red));
+				mLibterminalStartStopButton.setText(getString(R.string.stop_search));
+			}
+		} else {
+			mSearchStateTV.setText(getString(R.string.nodes_search));
+			mLibterminalStartStopButton.setBackgroundColor(getResources().getColor(R.color.player_green));
+			mLibterminalStartStopButton.setText(getString(R.string.start_search));
 		}
-		setupSwitchCompatListener();
 		return rootView;
 	}
 
-	private void setupSwitchCompatListener() {
-		mLibterminalStartStopSW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+	private void setupOnClickListener() {
+		mLibterminalStartStopButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (mTerminalAPI == null) {
+			public void onClick(View v) {
+				if(mTerminalAPI == null) {
 					Toast.makeText(getContext().getApplicationContext(),
 						"Aun no se ha enlazado con la terminal",
 						Toast.LENGTH_LONG).show();
-					buttonView.setChecked(false);
 					return;
 				}
-				if (isChecked) {
+				if(mTerminalAPI.isUp()) {
+					mSearchStateTV.setText(getString(R.string.nodes_search));
+					mLibterminalStartStopButton.setBackgroundColor(getResources().getColor(R.color.player_green));
+					mLibterminalStartStopButton.setText(getString(R.string.start_search));
+					mListener.terminalOff();
 					try {
-						if (mTerminalAPI.isUp()) {
-							buttonView.setChecked(true);
-							return;
-						}
-						mTerminalAPI.start();
-					} catch (IOException e) {
+						mTerminalAPI.stop();
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					mTerminalAPI.startNodesSearch();
 				} else {
+					mSearchStateTV.setText(getString(R.string.searching_nodes));
+					mLibterminalStartStopButton.setBackgroundColor(getResources().getColor(R.color.player_red));
+					mLibterminalStartStopButton.setText(getString(R.string.stop_search));
 					try {
-						if (!mTerminalAPI.isUp()) {
-							buttonView.setChecked(false);
-							return;
-						}
-						mListener.terminalOff();
-						mTerminalAPI.stop();
-						Toast.makeText(getContext().getApplicationContext(),
-							"Terminal apagada",
-							Toast.LENGTH_SHORT).show();
-					} catch (Exception e) {
+						mTerminalAPI.start();
+						mTerminalAPI.startNodesSearch();
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
