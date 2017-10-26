@@ -143,11 +143,21 @@ public class PlayerResultsFragment extends Fragment {
 		if (totalSteps != 0) {
 			while (!playersCount.isEmpty()) {
 				int maxaux = -1;
+				long mintime = Long.MAX_VALUE;
 				String mstring = "";
 				for (Map.Entry<String, Integer> entry : playersCount.entrySet()) {
 					if (entry.getValue() > maxaux) {
 						maxaux = entry.getValue();
 						mstring = entry.getKey();
+					}
+				}
+				if (mResults.isWaitForAllPlayers()) {
+					for (Map.Entry<String, Long> entry : playersTime.entrySet()) {
+						if ((entry.getValue() < mintime) && (playersCount.get(entry.getKey())>= maxaux)) {
+							mintime = entry.getValue();
+							mstring = entry.getKey();
+							maxaux = playersCount.get(mstring);
+						}
 					}
 				}
 				TextView tv = (TextView) lLayout.inflate(getContext(), R.layout.step_done, null);
@@ -166,6 +176,8 @@ public class PlayerResultsFragment extends Fragment {
 					w = true;
 				}
 				playersCount.remove(mstring);
+				playersTime.remove(mstring);
+				playersTimeouts.remove(mstring);
 			}
 		}
 
