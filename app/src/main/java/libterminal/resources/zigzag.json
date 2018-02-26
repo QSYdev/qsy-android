@@ -1,0 +1,89 @@
+{
+  "playerCount": 1,
+  "numberOfNodes": 5,
+  "totalTimeOut": 0,
+  "steps": [
+    {
+      "expression": "1",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 1,
+          "delay": 0,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 0
+          }
+        }
+      ]
+    },
+    {
+      "expression": "2",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 2,
+          "delay": 0,
+          "color": {
+            "red": 0,
+            "green": 15,
+            "blue": 0
+          }
+        }
+      ]
+    },
+    {
+      "expression": "3",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 3,
+          "delay": 0,
+          "color": {
+            "red": 0,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "4",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 4,
+          "delay": 0,
+          "color": {
+            "red": 0,
+            "green": 15,
+            "blue": 15
+          }
+        }
+      ]
+    },
+    {
+      "expression": "5",
+      "timeOut": 0,
+      "stopOnTimeout": false,
+      "nodesConfigurations": [
+        {
+          "id": 5,
+          "delay": 0,
+          "color": {
+            "red": 15,
+            "green": 0,
+            "blue": 15
+          }
+        }
+      ]
+    }
+  ],
+  "name": "Zig-Zag",
+  "description": "Rutina para evaluar la velocidad de reacción lateral de los jugadores/as."
+}

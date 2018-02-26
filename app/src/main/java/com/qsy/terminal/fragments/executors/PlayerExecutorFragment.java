@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,6 +121,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 		mWaitForAllSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.wait_for_all_sc);
 		mStopOnTimeOutSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.stop_on_timeout_sc);
+		mStopOnTimeOutSwitchCompat.setEnabled(false);
 		mSoundSwitchCompat = (SwitchCompat) rootView.findViewById(R.id.sound_sc);
 		setupSwitchCompatListeners();
 
@@ -148,7 +150,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> adapterView) {
-
+				mSelectedNode = 0;
 			}
 		});
 	}
@@ -228,6 +230,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerRedOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.RED);
 					mPlayerRedButton.setText(getString(R.string.button_on));
 					mPlayerRedOn = true;
@@ -242,6 +246,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerGreenOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.GREEN);
 					mPlayerGreenButton.setText(getString(R.string.button_on));
 					mPlayerGreenOn = true;
@@ -256,6 +262,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerBlueOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.BLUE);
 					mPlayerBlueButton.setText(getString(R.string.button_on));
 					mPlayerBlueOn = true;
@@ -270,6 +278,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerCyanOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.CYAN);
 					mPlayerCyanButton.setText(getString(R.string.button_on));
 					mPlayerCyanOn = true;
@@ -284,6 +294,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 			@Override
 			public void onClick(View view) {
 				if (!mPlayerMagentaOn) {
+					if(mSelectedNode == 0)
+						return;
 					addColorQueue(Color.MAGENTA);
 					mPlayerMagentaButton.setText(getString(R.string.button_on));
 					mPlayerMagentaOn = true;
@@ -332,6 +344,8 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 							));
 						}
 					})
+					.setPlusMinusVisibility(View.INVISIBLE)
+					.setDecimalVisibility(View.INVISIBLE)
 					.setMinNumber(BigDecimal.valueOf(0));
 				npb.show();
 			}
@@ -347,12 +361,20 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 						@Override
 						public void onDialogNumberSet(int reference, BigInteger number, double decimal, boolean isNegative, BigDecimal fullNumber) {
 							mStepTimeoutValue = fullNumber.toBigInteger();
+							if(mStepTimeoutValue.intValue() != 0) {
+								mStopOnTimeOutSwitchCompat.setEnabled(true);
+							} else {
+								mStopOnTimeOutSwitchCompat.setChecked(false);
+								mStopOnTimeOutSwitchCompat.setEnabled(false);
+							}
 							mStepTimeoutTextView.setText(getString(
 								R.string.timeout_in_miliseconds,
 								mStepTimeoutValue
 							));
 						}
 					})
+					.setPlusMinusVisibility(View.INVISIBLE)
+					.setDecimalVisibility(View.INVISIBLE)
 					.setMinNumber(BigDecimal.valueOf(0));
 				npb.show();
 			}
@@ -421,6 +443,7 @@ public class PlayerExecutorFragment extends Fragment implements EventListener {
 				try {
 					// TODO: el primer parametro es la asociacion de nodos. En un futuro
 					// vamos a tener la asociacion a nivel aplicacion
+					mTerminal.stopNodesSearch();
 					mTerminal.executePlayer(null, mSelectedNode, playersAndColors,
 						mWaitForAllValue, mStepTimeoutValue.longValue(), mNodeDelayValue.longValue(),
 						mRoutineDurationValue * 1000, mAmountOfStepsValue, mStopOnTimeoutValue,

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import libterminal.api.TerminalAPI;
@@ -38,6 +36,7 @@ public class CustomExecutorFragment extends Fragment {
 	private TextView mNumberOfNodesTV;
 	private TextView mNumberOfStepsTV;
 	private TextView mTotalTimeOutTV;
+	private TextView mDescriptionTV;
 	private Spinner mRoutineSP;
 	private Button mStartRoutineBT;
 	private SwitchCompat mSoundSC;
@@ -81,8 +80,6 @@ public class CustomExecutorFragment extends Fragment {
 			}
 			Routine routine = null;
 			try {
-				Log.d("NAME", name);
-				Log.d("NAME", f.getPath());
 				routine = RoutineManager.loadRoutine(f.getPath());
 				mRoutines.put(routine.getName(), routine);
 			} catch (IOException e) {
@@ -99,6 +96,7 @@ public class CustomExecutorFragment extends Fragment {
 		mNumberOfNodesTV = (TextView) rootView.findViewById(R.id.custom_number_of_nodes);
 		mNumberOfStepsTV = (TextView) rootView.findViewById(R.id.custom_number_of_steps);
 		mTotalTimeOutTV = (TextView) rootView.findViewById(R.id.custom_total_time_out);
+		mDescriptionTV = (TextView) rootView.findViewById(R.id.custom_description);
 
 		mSoundSC = (SwitchCompat) rootView.findViewById(R.id.custom_sound_sc);
 		mSoundSC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -130,6 +128,7 @@ public class CustomExecutorFragment extends Fragment {
 					return;
 				}
 
+				mTerminal.stopNodesSearch();
 				mTerminal.executeCustom(mRoutine, null, mSoundValue, false);
 				Intent intent = new Intent(getContext(), ExecutionActivity.class);
 				startActivity(intent);
@@ -165,6 +164,8 @@ public class CustomExecutorFragment extends Fragment {
 
 	private void routineData(String name) {
 		mRoutine = mRoutines.get(name);
+		mDescriptionTV.setText(mRoutine.getDescription());
+		mDescriptionTV.setVisibility(View.VISIBLE);
 		mNumberOfNodesTV.setText(getResources().getQuantityString(R.plurals.custom_number_of_nodes, mRoutine.getNumberOfNodes(), mRoutine.getNumberOfNodes()));
 		mNumberOfNodesTV.setVisibility(View.VISIBLE);
 		mNumberOfStepsTV.setText(getResources().getQuantityString(R.plurals.custom_number_of_steps, mRoutine.getSteps().size(), mRoutine.getSteps().size()));
